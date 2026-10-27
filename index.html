@@ -1,0 +1,685 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Mon budget étudiant</title>
+<meta name="theme-color" content="#1e1a4d">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Budgy">
+<link rel="icon" href="./app-icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" sizes="180x180" href="./app-icon-180.png">
+<link rel="manifest" href="./manifest.webmanifest">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Unbounded:wght@500;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#efebff;--card:#fff;--ink:#1e1a4d;--mut:#6f6a9a;--line:#e0daf7;--ok:#0f9d78;--bad:#e5484d;--hero:#1e1a4d;
+--c1:#6c63ff;--c2:#ffb020;--c3:#19c3a0;--c4:#ff5c8a;--c5:#3d9bff;--c6:#ff8a4c;
+box-sizing:border-box;padding-bottom:env(safe-area-inset-bottom,0px)}
+:root[data-theme="dark"]{--bg:#12102b;--card:#1d1a44;--ink:#f2efff;--mut:#a7a2d6;--line:#2e2a63;--ok:#43d9ae;--bad:#ff7a80;--hero:#2a2575}
+:root[data-theme="ocean"]{--bg:#e8f6ff;--card:#fff;--ink:#123b58;--mut:#537c94;--line:#c5e2f2;--ok:#087d70;--bad:#d64058;--hero:#075985;--c1:#0284c7;--c2:#f59e0b;--c3:#14b8a6;--c4:#f472b6;--c5:#6366f1;--c6:#fb923c}
+:root[data-theme="sunset"]{--bg:#fff0e8;--card:#fffaf6;--ink:#542b3a;--mut:#96717b;--line:#f4d4c8;--ok:#16856c;--bad:#d94354;--hero:#8f3452;--c1:#e45c78;--c2:#f4a261;--c3:#48a999;--c4:#c8557d;--c5:#638ad4;--c6:#ed7d3a}
+:root[data-theme="mint"]{--bg:#e9f7ef;--card:#fff;--ink:#173d32;--mut:#5e8274;--line:#c8e5d4;--ok:#13845c;--bad:#d44957;--hero:#176b57;--c1:#21a179;--c2:#e7a62f;--c3:#38b2ac;--c4:#ed7092;--c5:#5488d8;--c6:#e78845}
+:root[data-theme="rose"]{--bg:#fff0f5;--card:#fffafd;--ink:#4b2038;--mut:#95677f;--line:#f2d5e2;--ok:#16856c;--bad:#d94354;--hero:#8d315f;--c1:#d94f91;--c2:#f2a65a;--c3:#45aa91;--c4:#ec6c78;--c5:#7788dc;--c6:#d88b52}
+:root[data-theme="forest"]{--bg:#edf4e9;--card:#fbfdf8;--ink:#263d2b;--mut:#6a806c;--line:#d5e2d0;--ok:#19805b;--bad:#ce5353;--hero:#315d42;--c1:#47865b;--c2:#d4a23d;--c3:#53a992;--c4:#d87970;--c5:#638bc1;--c6:#ba8050}
+:root[data-theme="midnight"]{--bg:#101820;--card:#1a2730;--ink:#edf5f2;--mut:#a0b3b0;--line:#30434a;--ok:#50d1a2;--bad:#ff8087;--hero:#153b43;--c1:#43c6ac;--c2:#f0b857;--c3:#53b6cc;--c4:#ed7e9b;--c5:#8e9cf2;--c6:#f0935e}
+@media (prefers-color-scheme:dark){:root[data-theme="system"]{--bg:#12102b;--card:#1d1a44;--ink:#f2efff;--mut:#a7a2d6;--line:#2e2a63;--ok:#43d9ae;--bad:#ff7a80;--hero:#2a2575}}
+*{box-sizing:border-box}
+html{color-scheme:light;background:var(--bg)}
+:root[data-theme="dark"]{color-scheme:dark}
+:root[data-theme="midnight"]{color-scheme:dark}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:'DM Sans',system-ui,-apple-system,'Segoe UI',sans-serif;line-height:1.45}
+main{max-width:560px;margin:0 auto;padding:calc(20px + env(safe-area-inset-top,0px)) 16px 120px}
+h1{font-family:'Unbounded','DM Sans',system-ui,sans-serif;font-size:1.45rem;margin:0 0 6px;font-weight:700;letter-spacing:-.02em}
+h2{font-family:'Unbounded','DM Sans',system-ui,sans-serif;font-size:.95rem;margin:0 0 12px;font-weight:500}
+p.s{color:var(--mut);margin:0 0 18px}
+.card{background:var(--card);border-radius:28px;padding:20px;margin-bottom:14px}
+label{display:block;font-weight:700;margin:16px 0 6px}
+input{width:100%;font:inherit;font-size:1.05rem;padding:14px 16px;border-radius:16px;border:2px solid transparent;background:var(--bg);color:var(--ink)}
+input:focus{outline:0;border-color:var(--c1)}
+button:focus-visible,summary:focus-visible{outline:3px solid var(--c1);outline-offset:2px}
+button{font:inherit;cursor:pointer}
+.btn{width:100%;margin-top:18px;padding:15px;border:0;border-radius:18px;background:var(--c1);color:#fff;font-weight:700;font-size:1rem;transition:transform .15s}
+.btn:active{transform:scale(.97)}
+.hero{margin:0 0 14px;padding:16px 18px 18px;background:var(--hero);color:#fff;border-radius:28px;position:sticky;top:calc(8px + env(safe-area-inset-top,0px));z-index:15;box-shadow:0 14px 30px -14px rgba(30,26,77,.55);transition:padding .25s}
+.hero.mini{padding:10px 18px 12px}.hero.mini .top,.hero.mini .of,.hero.mini .mood{display:none}.hero.mini .two .k{font-size:.7rem}.hero.mini .mid2{font-size:1rem}.hero.mini .big{font-size:1.5rem}.hero.mini .stack{margin:8px 0 0;height:14px}
+.hero .top{display:flex;justify-content:space-between;align-items:baseline;gap:8px;font-size:.85rem;opacity:.85}
+.hero h1{font-size:.95rem;margin:0}
+.hero .k{margin:10px 0 0;opacity:.7}
+.hero .of{margin:2px 0 0;opacity:.7}
+.hero .bad{color:#ff9a9e}
+.big{font-family:'Unbounded','DM Sans',system-ui,sans-serif;font-size:clamp(1.6rem,7.5vw,2.2rem);font-weight:700;line-height:1.1;letter-spacing:-.03em;display:inline-block}
+.two{display:flex;justify-content:space-between;align-items:flex-end;gap:14px;margin-top:10px}.two>div{min-width:0}.rs{text-align:right}.two .k{margin:0 0 2px;font-size:.8rem}
+.mid2{font-family:'Unbounded','DM Sans',system-ui,sans-serif;font-weight:500;font-size:1.1rem;letter-spacing:-.02em}
+.stack{position:relative;display:flex;gap:3px;height:22px;border-radius:99px;background:rgba(255,255,255,.14);margin:14px 0 4px}
+.stack i{display:block;height:100%;width:0;border-radius:99px;transition:width 1s cubic-bezier(.2,.8,.2,1)}
+.tick{position:absolute;top:-6px;bottom:-6px;width:3px;border-radius:3px;background:#fff;transform:translateX(-1.5px)}
+.hint{display:none}
+.mood{margin:12px 0 0;font-weight:700}
+.duo{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:0;position:relative}
+.duo div{background:var(--card);border-radius:22px;padding:14px 16px;box-shadow:0 12px 28px -14px rgba(30,26,77,.45)}
+.duo span{display:block;font-size:.8rem;color:var(--mut)}
+.duo b{font-family:'Unbounded','DM Sans',system-ui,sans-serif;font-size:1.05rem;font-weight:500}
+.pace:empty{display:none}.pace{text-align:center;color:var(--mut);margin:14px 0 0}
+.pace b{color:var(--ok)}
+.h{font-family:'Unbounded','DM Sans',system-ui,sans-serif;font-size:.95rem;font-weight:500;margin:26px 0 12px}
+.tiles{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip,.vw{padding:10px 15px;border-radius:99px;border:0;background:var(--bg);color:var(--ink);font-weight:700;transition:transform .15s,background .2s}
+.chip:active,.vw:active{transform:scale(.94)}
+.chip[aria-pressed="true"],.vw[aria-pressed="true"]{background:var(--ink);color:var(--bg)}
+.tile{position:relative;overflow:hidden;text-align:left;padding:16px;border-radius:26px;min-height:124px;background:var(--card);color:var(--ink);display:flex;flex-direction:column;justify-content:flex-end;gap:2px}
+.tile[aria-pressed="true"]{background:var(--card);color:var(--ink);box-shadow:inset 0 0 0 3px var(--col)}
+.tile>*:not(.fill){position:relative}
+.tile .fill{position:absolute;left:0;right:0;bottom:0;height:0;background:color-mix(in srgb,var(--col) 40%,transparent);transition:height 1s cubic-bezier(.2,.8,.2,1)}
+.tile.over .fill{background:color-mix(in srgb,var(--bad) 50%,transparent)}
+.tile .em{font-size:1.9rem;line-height:1;margin-bottom:auto;padding-bottom:12px}
+.tile .nm{font-weight:700}
+.tile .am{font-family:'Unbounded','DM Sans',system-ui,sans-serif;font-size:.8rem}
+.tile .am small{font-family:'DM Sans',system-ui,sans-serif;color:var(--mut);font-size:.75rem}
+.stats{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px}
+.stat{background:var(--bg);border-radius:18px;padding:12px}
+.stat span{display:block;color:var(--mut);font-size:.8rem}
+.stat b{font-family:'Unbounded','DM Sans',system-ui,sans-serif;font-size:.95rem;font-weight:500}
+.pb{margin:8px 0}.pb small{display:flex;justify-content:space-between;color:var(--mut)}
+.cat{margin:16px 0}
+.cat .t{display:flex;justify-content:space-between;gap:8px;font-weight:700}
+.bar{height:12px;border-radius:99px;background:var(--bg);overflow:hidden;margin-top:6px}
+.bar i{display:block;height:100%;width:0;border-radius:99px;transition:width .9s cubic-bezier(.2,.8,.2,1)}
+.row{display:flex;align-items:center;gap:10px;padding:11px 0;border-top:1px solid var(--line)}
+.row:first-of-type{border-top:0}
+.dot{width:10px;height:10px;border-radius:50%;flex:none}
+.row .n{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-weight:500}
+.row .n small{color:var(--mut);display:block}
+.x{border:0;background:none;color:var(--mut);font-size:1.2rem;padding:4px 8px}
+.bad{color:var(--bad)}.ok{color:var(--ok)}
+details summary{cursor:pointer;font-weight:700}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.lnk{background:none;border:0;color:var(--bad);font-weight:700;margin-top:14px;padding:0}
+.empty{color:var(--mut);margin:0}
+.tp details{border-top:1px solid var(--line);padding:13px 0}.tp details:first-child{border-top:0}.tp p{margin:8px 0 0;color:var(--mut)}
+.chat-log{display:grid;gap:10px;margin:12px 0}
+.chat-message{max-width:92%;padding:11px 14px;border-radius:18px;background:var(--bg);white-space:pre-wrap;overflow-wrap:anywhere}
+.chat-message.user{justify-self:end;background:var(--c1);color:#fff}
+.chat-form{display:flex;gap:8px;align-items:stretch}
+.chat-form input{min-width:0}
+.chat-form button{flex:none;padding:0 16px;border:0;border-radius:16px;background:var(--c1);color:#fff;font-weight:700}
+.chat-note{margin:10px 0 0;color:var(--mut);font-size:.82rem}
+.chat-launch,.form-toggle{display:flex;align-items:center;gap:12px;width:100%;padding:12px 16px;border:0;border-radius:22px;background:var(--card);color:var(--ink);text-align:left;font-weight:700;box-shadow:0 8px 22px -14px rgba(30,26,77,.55)}
+.chat-avatar{width:48px;height:48px;display:grid;place-items:center;flex:none;border-radius:50%;background:var(--c1);font-size:1.6rem}
+.chat-launch small{display:block;color:var(--mut);font-weight:400}
+.chat-panel,.form-panel{margin-top:12px}
+.form-panel .card{margin-bottom:0}
+.form-toggle{margin:14px 0}
+.form-toggle small{display:block;margin-top:3px;color:var(--mut);font-size:.84rem;font-weight:400}
+.form-toggle-icon{width:42px;height:42px;display:grid;place-items:center;flex:none;border-radius:50%;background:var(--bg);font-size:1.35rem}
+.expense-toggle{position:relative;min-height:76px;margin:18px 0;padding:14px 18px;border:1px solid color-mix(in srgb,var(--c1) 22%,var(--line));background:linear-gradient(115deg,color-mix(in srgb,var(--c1) 10%,var(--card)),var(--card) 72%);box-shadow:0 12px 28px -16px color-mix(in srgb,var(--c1) 55%,transparent);transition:transform .18s,box-shadow .18s}
+.expense-toggle:hover{transform:translateY(-2px);box-shadow:0 16px 30px -15px color-mix(in srgb,var(--c1) 60%,transparent)}
+.expense-toggle .form-toggle-icon{width:48px;height:48px;background:var(--c1);color:#fff;font-size:1.5rem}
+.expense-toggle-label{flex:1}
+.form-toggle-arrow{font-size:1.8rem;line-height:1;color:var(--c1);transition:transform .18s}
+.expense-toggle[aria-expanded="true"] .form-toggle-arrow{transform:rotate(90deg)}
+.theme-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.theme-option{display:flex;align-items:center;gap:10px;padding:12px;border:2px solid transparent;border-radius:18px;background:var(--bg);color:var(--ink);text-align:left;font-weight:700}
+.theme-option[aria-pressed="true"]{border-color:var(--c1)}
+.theme-swatch{width:28px;height:28px;flex:none;border-radius:50%;background:var(--swatch)}
+.afford-section{margin:14px 0}
+.afford-panel{margin:12px 0 0}
+.afford-panel .card{margin-bottom:0}
+.forecast{margin:0 0 14px}
+.forecast-row{display:flex;justify-content:space-between;gap:8px;padding:9px 0;border-top:1px solid var(--line)}
+.forecast-row:first-of-type{border-top:0}
+.tile .am small.planned-amount{display:block;color:var(--mut)}
+.forecast-row span{min-width:0}
+.forecast-row small{display:block;color:var(--mut)}
+.alert-list{margin:0;padding-left:22px}
+.alert-list li{margin:7px 0}
+.month-summary{margin-top:14px}
+.plan-form{display:grid;grid-template-columns:1fr 1fr;gap:0 10px}
+.plan-form .wide{grid-column:1/-1}
+.nav{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(14px + env(safe-area-inset-bottom,0px));display:flex;gap:4px;padding:6px;background:var(--ink);border-radius:99px;z-index:20;box-shadow:0 14px 30px -10px rgba(30,26,77,.6)}
+.tb{border:0;background:none;color:var(--bg);padding:11px 16px;border-radius:99px;font-weight:700;white-space:nowrap}
+.tb[aria-pressed="true"]{background:var(--bg);color:var(--ink)}
+select,textarea{width:100%;font:inherit;font-size:1.05rem;padding:14px 16px;border-radius:16px;border:2px solid transparent;background:var(--bg);color:var(--ink)}
+select:focus,textarea:focus{outline:0;border-color:var(--c1)}
+textarea{resize:none;font-size:.78rem;word-break:break-all}
+h3.sub{font-family:'Unbounded','DM Sans',system-ui,sans-serif;font-size:.9rem;font-weight:500;margin:26px 0 6px}
+.pr{margin:12px 0 0;font-weight:700;color:var(--mut)}
+.bar.tall{height:20px}.gl{margin:10px 0 2px;font-size:1.05rem}
+.plot{position:relative;height:170px;margin-top:24px;display:flex;gap:8px;align-items:flex-end}
+.col{flex:1;height:100%;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;min-width:0}
+.col i{display:block;width:100%;height:0;border-radius:12px 12px 4px 4px;transition:height 1s cubic-bezier(.2,.8,.2,1)}
+.col small{font-size:.66rem;color:var(--mut);margin-bottom:3px;white-space:nowrap}
+.bl{position:absolute;left:0;right:0;border-top:2px dashed var(--mut);opacity:.6}
+.bl span{position:absolute;right:0;top:-18px;font-size:.7rem;color:var(--mut)}
+.lbls{display:flex;gap:8px;margin-top:6px}.lbls span{flex:1;text-align:center;font-size:.75rem;color:var(--mut);min-width:0}
+.cmp{display:flex;justify-content:space-between;gap:8px;padding:10px 0;border-top:1px solid var(--line)}
+.cmp:first-of-type{border-top:0}
+.agenda-week{display:flex;justify-content:space-between;align-items:center;gap:8px;margin:12px 0}
+.agenda-week button{border:0;border-radius:14px;padding:9px 13px;background:var(--bg);color:var(--ink);font-weight:700}
+.agenda-week-label{font-weight:700;text-align:center}
+.agenda-days{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:6px;margin:14px 0}
+.agenda-day{min-width:0;min-height:84px;padding:8px 3px;border:1px solid var(--line);border-radius:16px;background:var(--bg);color:var(--ink);text-align:center}
+.agenda-day[aria-pressed="true"]{border-color:var(--c1);box-shadow:inset 0 0 0 1px var(--c1);background:color-mix(in srgb,var(--c1) 9%,var(--card))}
+.agenda-day-name,.agenda-day-date,.agenda-day-total{display:block}
+.agenda-day-name{font-size:.65rem;color:var(--mut)}
+.agenda-day-date{font-weight:700;font-size:1.05rem}
+.agenda-day-total{font-size:.62rem;line-height:1.35;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.agenda-day-total.income{color:var(--ok)}
+.agenda-day-total.expense{color:var(--bad)}
+.agenda-detail-title{margin:18px 0 4px;font-weight:700}
+.agenda-movement{display:flex;align-items:center;gap:10px;padding:11px 0;border-top:1px solid var(--line)}
+.agenda-movement:first-of-type{border-top:0}
+.agenda-movement .n{flex:1;min-width:0;overflow-wrap:anywhere}
+.agenda-movement .n small{display:block;color:var(--mut)}
+.agenda-movement b{white-space:nowrap}
+.agenda-legend{display:flex;gap:12px;flex-wrap:wrap;margin-top:12px;color:var(--mut);font-size:.8rem}
+.agenda-legend span{display:inline-flex;align-items:center;gap:5px}
+.agenda-legend i{width:9px;height:9px;border-radius:50%;background:var(--bad)}
+.agenda-legend .income i{background:var(--ok)}
+.livret-page{max-width:1040px}
+.livret-hero{position:relative;overflow:hidden;margin:2px 0 18px;padding:28px 30px;border-radius:30px;background:linear-gradient(125deg,var(--hero),color-mix(in srgb,var(--c1) 72%,var(--hero)));color:#fff;box-shadow:0 18px 40px -24px color-mix(in srgb,var(--hero) 75%,transparent)}
+.livret-hero:after{content:"";position:absolute;width:230px;height:230px;right:-55px;top:-105px;border:1px solid rgba(255,255,255,.16);border-radius:50%;box-shadow:0 0 0 28px rgba(255,255,255,.045),0 0 0 58px rgba(255,255,255,.035)}
+.livret-hero-top{position:relative;z-index:1;display:flex;align-items:flex-start;gap:16px}
+.livret-hero-icon{display:grid;place-items:center;flex:none;width:58px;height:58px;border:1px solid rgba(255,255,255,.22);border-radius:20px;background:rgba(255,255,255,.13);font-size:1.9rem}
+.livret-kicker{margin:1px 0 7px;color:rgba(255,255,255,.72);font-size:.72rem;font-weight:700;letter-spacing:.13em}
+.livret-hero h1{margin:0;font-size:clamp(1.25rem,4vw,1.8rem)}
+.livret-hero p:last-child{position:relative;z-index:1;max-width:580px;margin:17px 0 0;color:rgba(255,255,255,.82);font-size:.94rem}
+.livret-layout{display:grid;grid-template-columns:minmax(0,.92fr) minmax(0,1.08fr);align-items:start;gap:16px}
+.livret-layout>.card{min-width:0;padding:22px}
+.livret-card-heading{display:flex;align-items:center;gap:11px;margin-bottom:16px}
+.livret-card-heading-icon{display:grid;place-items:center;width:42px;height:42px;flex:none;border-radius:15px;background:color-mix(in srgb,var(--c1) 12%,var(--bg));font-size:1.25rem}
+.livret-card-heading h2{margin:0}
+.livret-card-heading p{margin:3px 0 0;color:var(--mut);font-size:.8rem}
+.livret-assumption{margin:0 0 12px;padding:13px 14px;border:1px solid color-mix(in srgb,var(--c1) 18%,var(--line));border-radius:17px;background:color-mix(in srgb,var(--c1) 6%,var(--card));color:var(--mut);font-size:.82rem}
+.livret-assumption strong{display:block;margin-bottom:3px;color:var(--ink);font-size:.88rem}
+.livret-form{display:grid;grid-template-columns:1fr 1fr;gap:0 12px}
+.livret-form .wide{grid-column:1/-1}
+.livret-form label,.livret-withdrawal label{margin-top:13px;font-size:.83rem}
+.livret-form input,.livret-form select,.livret-withdrawal input{padding:12px 13px;border-radius:14px;font-size:.95rem}
+.livret-form select{min-height:49px}
+.livret-results{display:grid;gap:12px}
+.livret-result{position:relative;overflow:hidden;padding:17px;border:1px solid var(--line);border-radius:21px;background:linear-gradient(145deg,color-mix(in srgb,var(--c1) 5%,var(--card)),var(--card) 65%)}
+.livret-result:before{content:"";position:absolute;left:0;top:17px;bottom:17px;width:4px;border-radius:0 4px 4px 0;background:var(--livret-accent,var(--c1))}
+.livret-result[data-livret="ldds"]{--livret-accent:var(--c3)}
+.livret-result-head{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+.livret-result-icon{display:grid;place-items:center;width:40px;height:40px;flex:none;border-radius:14px;background:color-mix(in srgb,var(--livret-accent,var(--c1)) 14%,var(--card));font-size:1.2rem}
+.livret-result h3{flex:1;margin:0;font-family:'Unbounded','DM Sans',system-ui,sans-serif;font-size:.88rem;font-weight:500}
+.livret-cap{padding:5px 9px;border-radius:99px;background:color-mix(in srgb,var(--livret-accent,var(--c1)) 10%,var(--card));color:var(--mut);font-size:.7rem;font-weight:700;white-space:nowrap}
+.livret-result .stats{margin-top:0}
+.livret-result .stat{padding:12px;border:1px solid color-mix(in srgb,var(--line) 75%,transparent);background:color-mix(in srgb,var(--card) 78%,transparent)}
+.livret-result .stat:first-child{grid-column:1/-1;padding:15px;background:var(--livret-accent,var(--c1));color:#fff}
+.livret-result .stat:first-child span{color:rgba(255,255,255,.8)}
+.livret-result .stat:first-child b{font-size:clamp(1.25rem,4vw,1.7rem);font-weight:700}
+.livret-result .stat b.ok{color:inherit}
+.livret-result .stat:nth-child(2) b{color:var(--ok)}
+.livret-result .forecast-row{gap:12px}
+.livret-result .forecast-row span{flex:1}
+.livret-withdrawals{margin-top:17px;padding-top:4px;border-top:1px solid var(--line)}
+.livret-withdrawals h3{margin:16px 0 4px;font-size:.88rem}
+.livret-withdrawal-toggle{margin:0;padding:11px 13px;border:1px solid var(--line);border-radius:16px;box-shadow:none;background:var(--bg);font-size:.87rem}
+.livret-withdrawal-toggle .form-toggle-arrow{margin-left:auto}
+.livret-withdrawal-fields{margin-top:10px}
+.livret-empty{margin:10px 0;padding:10px 12px;border-radius:13px;background:var(--bg);color:var(--mut);font-size:.82rem}
+.livret-withdrawal{display:grid;grid-template-columns:1fr 1fr auto;align-items:end;gap:8px}
+.livret-withdrawal .vw{width:46px;height:46px;margin-bottom:2px;border-radius:14px;background:var(--c1);color:white;font-size:1.35rem}
+.livret-sources{margin-top:16px;padding-top:13px;border-top:1px solid var(--line)}
+.livret-sources .chat-note{margin-top:0}
+.livret-source{display:inline-flex;align-items:center;gap:6px;margin:9px 10px 0 0;color:var(--c1);font-size:.82rem;font-weight:700;text-decoration:none}
+.livret-source:hover{text-decoration:underline}
+.livret-results[aria-live]{min-height:60px}
+.livret-input-note{margin:5px 0 0;color:var(--mut);font-size:.78rem}
+.livret-error{min-height:1.2em;margin:8px 0 0}
+.livret-sim-toggle{margin:0 0 14px;padding:17px 18px;border:1px solid color-mix(in srgb,var(--c1) 20%,var(--line));background:linear-gradient(115deg,color-mix(in srgb,var(--c1) 9%,var(--card)),var(--card) 78%);cursor:pointer}
+.livret-sim-toggle .form-toggle-icon{background:var(--c1);color:#fff}
+.livret-sim-toggle .form-toggle-arrow{margin-left:auto}
+.agenda-note{margin:8px 0 0;color:var(--mut);font-size:.78rem}
+.tb{padding:11px 14px}.tb:not([aria-pressed="true"]) span{display:none}
+[hidden]{display:none!important}
+@keyframes pop{0%{transform:scale(1)}40%{transform:scale(1.08)}100%{transform:scale(1)}}
+.pop{animation:pop .5s}
+@keyframes toast{0%{opacity:0;transform:translate(-50%,14px)}15%,80%{opacity:1;transform:translate(-50%,0)}100%{opacity:0}}
+.toast{position:fixed;left:50%;bottom:calc(88px + env(safe-area-inset-bottom,0px));background:var(--c1);color:#fff;padding:11px 18px;border-radius:99px;font-weight:700;animation:toast 2.2s forwards;z-index:30}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+@media (max-width:420px){.nav{gap:1px;padding:4px}.tb{padding:10px 8px}.tb[aria-pressed="true"]{padding-left:9px;padding-right:9px}}
+@media (max-width:360px){.tb,.tb[aria-pressed="true"]{padding:9px 6px}.tb[aria-pressed="true"] span{display:none}}
+@media (max-width:760px){.livret-layout{grid-template-columns:1fr;gap:12px}.livret-hero{padding:23px 20px;border-radius:25px}.livret-layout>.card{padding:18px}}
+@media (max-width:390px){.livret-form{grid-template-columns:1fr}.livret-form .wide{grid-column:auto}.livret-withdrawal{grid-template-columns:1fr 1fr}.livret-withdrawal .vw{grid-column:1/-1;width:100%;height:44px}.livret-result{padding:15px 13px}.livret-cap{font-size:.64rem;padding:5px 7px}}
+</style>
+</head>
+<body>
+<main id="app"></main>
+<script>
+var KEY='budget-v1';
+var CATS=[
+{id:'logement',n:'Logement',e:'🏠',c:'--c1',p:35},
+{id:'courses',n:'Courses',e:'🛒',c:'--c2',p:20},
+{id:'essence',n:'Essence',e:'⛽',c:'--c3',p:10},
+{id:'loisirs',n:'Loisirs',e:'🎉',c:'--c4',p:10},
+{id:'epargne',n:'Épargne',e:'🐷',c:'--c5',p:15},
+{id:'autres',n:'Études & autres',e:'📚',c:'--c6',p:10}];
+var NM={sem:['cette semaine','de la semaine','la semaine'],quinz:['cette quinzaine','de la quinzaine','la quinzaine'],mois:['ce mois-ci','du mois','le mois'],an:['cette année','de l’année','l’année'],autre:['cette période','de la période','la période']};
+var FQ=[['sem','Semaine'],['quinz','2 semaines'],['mois','Mois'],['an','Année'],['autre','Autre']];
+var RM=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
+var S=null,sel='essence',ff='mois',pop=false,toast='',D=864e5,tab='budget',agendaWeekOffset=0,agendaSelectedDate=null;
+var settingsIncomeOpen=false,settingsRecurringOpen=false,livretEditingOpen=false,livretWithdrawalsOpen=false,livretDraft=null;
+try{S=JSON.parse(localStorage.getItem(KEY))}catch(e){S=null}
+if(S){S.freq=S.freq||'mois';S.biz=S.biz||[];S.bt=S.bt||[];S.planned=S.planned||[];S.goalMoves=S.goalMoves||[];S.incomeDate=S.incomeDate||S.pstart||today();S.livretSim=S.livretSim||{initial:0,monthly:0,day:1,years:5,rateMode:'current',customRate:1.7,withdrawals:[]};S.livretSim.withdrawals=S.livretSim.withdrawals||[];S.theme=S.theme||'system';S.alertAt=S.alertAt||80}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}}
+function setTheme(theme){document.documentElement.setAttribute('data-theme',theme)}
+function fmt(n){return (Math.round(n*100)/100).toLocaleString('fr-FR',{style:'currency',currency:'EUR',maximumFractionDigits:2,minimumFractionDigits:0})}
+function esc(s){var d=document.createElement('div');d.textContent=s;return d.innerHTML}
+function num(v){return parseFloat(String(v).replace(',','.').replace(/\s/g,''))}
+function q(s){return Array.prototype.slice.call(document.querySelectorAll(s))}
+function cat(id){return CATS.filter(function(c){return c.id===id})[0]||CATS[5]}
+function today(){var n=new Date();return new Date(n.getFullYear(),n.getMonth(),n.getDate()).getTime()}
+var app=document.getElementById('app');
+
+function per(){var n=new Date(),t0=today(),f=S.freq,s,e;
+if(f==='mois'){s=new Date(n.getFullYear(),n.getMonth(),1).getTime();e=new Date(n.getFullYear(),n.getMonth()+1,1).getTime()}
+else if(f==='sem'){s=t0-((n.getDay()+6)%7)*D;e=s+7*D}
+else if(f==='an'){s=new Date(n.getFullYear(),0,1).getTime();e=new Date(n.getFullYear()+1,0,1).getTime()}
+else{var L=(f==='quinz'?14:Math.max(1,S.days||10))*D,p=S.pstart||t0;s=p+Math.floor((t0-p)/L)*L;e=s+L}
+return{s:s,e:e}}
+function dateStamp(value){var p=value.split('-');return new Date(+p[0],+p[1]-1,+p[2]).getTime()}
+function dateValue(time){var d=new Date(time);return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')}
+function pendingByCategory(range){var pending={};CATS.forEach(function(c){pending[c.id]=0});
+(S.planned||[]).forEach(function(e){if(e.t>=range.s&&e.t<range.e)pending[e.c]=(pending[e.c]||0)+e.a});
+return pending}
+function planUI(){var P=per(),h='<div class="card"><h2>Achats prévus</h2><p class="s">Ils sont réservés sans être comptés comme dépenses effectuées. La prévision tient compte des achats prévus dans la période.</p>';
+var planned=(S.planned||[]).slice().sort(function(a,b){return a.t-b.t});
+if(!planned.length)h+='<p class="empty">Aucun achat prévu.</p>';
+planned.forEach(function(e){var c=cat(e.c);h+='<div class="forecast-row"><span>'+esc(e.n)+'<small>'+c.e+' '+c.n+' · prévu le '+new Date(e.t).toLocaleDateString('fr-FR',{day:'numeric',month:'short'})+(e.t>=P.s&&e.t<P.e?' · cette période':'')+'</small></span><b>'+fmt(e.a)+'</b><button type="button" class="x" data-paid="'+esc(e.id)+'" aria-label="Marquer comme payé : '+esc(e.n)+'">✓</button><button type="button" class="x" data-planx="'+esc(e.id)+'" aria-label="Supprimer l’achat prévu : '+esc(e.n)+'">×</button></div>'});
+h+='<button type="button" class="form-toggle" id="plan-toggle" aria-expanded="false" aria-controls="plan-panel"><span class="form-toggle-icon" aria-hidden="true">📝</span><span>Ajouter un achat prévu<small>Appuie ici pour saisir les détails</small></span></button><div class="form-panel" id="plan-panel" hidden><div class="card"><div class="plan-form"><div class="wide"><label for="pn">Nom de l’achat</label><input id="pn" placeholder="ex. Chaussures" autocomplete="off"></div><div><label for="pa">Montant</label><input id="pa" inputmode="decimal" placeholder="ex. 60"></div><div><label for="pt">Date prévue</label><input id="pt" type="date" min="'+dateValue(today())+'" value="'+dateValue(today())+'"></div><div class="wide"><label for="pcat">Catégorie</label><select id="pcat">'+CATS.filter(function(c){return c.id!=='epargne'}).map(function(c){return '<option value="'+c.id+'">'+c.e+' '+c.n+'</option>'}).join('')+'</select></div></div><p id="plan-err" class="bad" role="alert"></p><button class="btn" id="plan-add" type="button">Enregistrer l’achat prévu</button></div></div></div>';
+return h}
+function bindPlans(){var add=document.getElementById('plan-add');if(!add)return;
+bindFormToggle('plan-toggle','plan-panel','pn');
+add.onclick=function(){var n=document.getElementById('pn').value.trim(),a=num(document.getElementById('pa').value),date=document.getElementById('pt').value,err=document.getElementById('plan-err');
+if(!n||!(a>0)||!date){err.textContent='Indique un achat, un montant supérieur à 0 et une date.';return}
+var when=dateStamp(date);if(when<today()){err.textContent='La date prévue ne peut pas être dans le passé.';return}
+var id='p'+Date.now();while(S.planned.some(function(e){return e.id===id}))id+='x';
+S.planned.push({id:id,n:n,a:a,c:document.getElementById('pcat').value,t:when});save();toast='📝 Achat prévu ajouté';dash()};
+q('[data-paid]').forEach(function(b){b.onclick=function(){var e=S.planned.filter(function(x){return x.id===b.dataset.paid})[0];if(!e)return;S.exp.push({a:e.a,c:e.c,n:e.n,t:Date.now()});S.planned=S.planned.filter(function(x){return x.id!==e.id});save();toast='✅ Achat marqué comme payé';dash()}});
+q('[data-planx]').forEach(function(b){b.onclick=function(){S.planned=S.planned.filter(function(e){return e.id!==b.dataset.planx});save();toast='Achat prévu supprimé';dash()}})}
+function bindFormToggle(toggleId,panelId,focusId){var toggle=document.getElementById(toggleId),panel=document.getElementById(panelId);if(!toggle||!panel)return;
+toggle.onclick=function(){panel.hidden=!panel.hidden;toggle.setAttribute('aria-expanded',!panel.hidden);if(!panel.hidden&&focusId)document.getElementById(focusId).focus()}}
+function availableBalance(){var P=per(),spent={},pending=pendingByCategory(P),all=0,reserved=0,goals=0;
+CATS.forEach(function(c){spent[c.id]=0});
+S.exp.forEach(function(e){all+=e.a;if(e.t>=P.s&&e.t<P.e)spent[e.c]=(spent[e.c]||0)+e.a});
+CATS.forEach(function(c){var left=Math.max(0,(S.budgets[c.id]||0)-(spent[c.id]||0));reserved+=left+Math.max(0,pending[c.id]-left)});
+(S.planned||[]).forEach(function(e){if(e.t<P.s||e.t>=P.e)reserved+=e.a});
+(S.goals||[]).forEach(function(g){goals+=g.s||0});
+var businessBalance=(S.bt||[]).reduce(function(s,e){if(e.k==='t')return s+(e.direction==='in'?e.a:-e.a);return s+(e.d?e.g:0)},0);
+return S.balance-all+businessBalance-reserved-goals}
+
+function fqui(cur,d){var h='<div class="chips">';
+FQ.forEach(function(x){h+='<button type="button" class="vw fq" data-f="'+x[0]+'" aria-pressed="'+(x[0]===cur)+'">'+x[1]+'</button>'});
+return h+'</div><div id="dw" '+(cur==='autre'?'':'hidden')+'><label for="dd">Tous les combien de jours ?</label><input id="dd" inputmode="numeric" value="'+(d||'')+'" placeholder="ex. 10"></div>'}
+function bindFq(){q('.fq').forEach(function(b){b.onclick=function(){ff=b.dataset.f;q('.fq').forEach(function(x){x.setAttribute('aria-pressed',x===b)});document.getElementById('dw').hidden=ff!=='autre'}})}
+
+function countUp(el,to){if(RM){el.textContent=fmt(to);return}
+var t0=performance.now();function st(t){var p=Math.min((t-t0)/900,1),e=1-Math.pow(1-p,3);el.textContent=fmt(to*e);if(p<1)requestAnimationFrame(st)}requestAnimationFrame(st)}
+
+function tabs(){var T=[['budget','📊','Budget'],['obj','🎯','Objectifs'],['hist','📅','Historique'],['biz','💼','Business'],['livrets','📈','Livrets'],['tips','💡','Astuces'],['settings','⚙️','Réglages']],h='<nav class="nav" aria-label="Navigation">';T.forEach(function(t){h+='<button type="button" class="tb" data-t="'+t[0]+'" aria-pressed="'+(tab===t[0])+'" aria-label="'+t[2]+'">'+t[1]+'<span> '+t[2]+'</span></button>'});return h+'</nav>'}
+function bindTabs(){q('.tb').forEach(function(b){b.onclick=function(){tab=b.dataset.t;dash();window.scrollTo(0,0)}})}
+var TIPS=[
+['⚖️','La règle 50 / 30 / 20','Vise 50 % pour les besoins (logement, courses, transport), 30 % pour les envies (sorties, loisirs) et 20 % pour l’épargne. Si c’est trop serré, commence par 5 % d’épargne et augmente petit à petit.'],
+['✍️','Note chaque dépense tout de suite','Ajoute la dépense dans l’appli juste après l’achat. Au bout d’une semaine, tu verras où part vraiment ton argent.'],
+['⏳','La règle des 24 heures','Pour un achat non prévu, attends une journée. Si tu en as toujours envie demain, c’est un vrai besoin.'],
+['🐷','Mets de côté en premier','Dès que tes revenus arrivent, mets ta part d’épargne de côté avant de dépenser le reste. Un fonds de sécurité d’environ un mois de dépenses évite bien des galères.'],
+['🛒','Courses moins chères','Fais une liste, mange avant d’y aller, prends les marques distributeur et compare le prix au kilo. Cuisine en grande quantité et congèle des portions. Les restos universitaires et les applis anti-gaspi coûtent souvent bien moins cher qu’un repas dehors.'],
+['⛽','Essence et transports','Covoiturage avec d’autres étudiants, vélo ou transports en commun avec tarif jeune quand c’est possible. Compare les prix des stations avant de faire le plein et regroupe tes trajets.'],
+['🎉','Loisirs sans se ruiner','Cherche les tarifs étudiants et les activités gratuites. Fixe-toi une somme de sorties pour la période et arrête-toi quand la barre est pleine.'],
+['📱','Fais le tri dans tes abonnements','Liste tes abonnements (streaming, musique, salle de sport). Garde ceux que tu utilises vraiment ou partage-les avec des amis quand c’est autorisé.'],
+['🏠','Aides à connaître','Renseigne-toi sur l’APL (CAF), les bourses du CROUS, la garantie Visale pour la caution du logement et les aides de ta région ou de ton école. Vérifie les conditions et les montants à jour sur les sites officiels.']];
+var BUSINESS_TIPS=[
+['📊','Calcule ta vraie marge','Pour chaque vente, retire du prix les coûts directs (achat ou fabrication, emballage, livraison, frais de plateforme et commissions). Suis aussi les charges fixes séparément : chiffre d’affaires et bénéfice ne sont pas la même chose.'],
+['🎯','Teste la demande avant d’investir','Parle à des clients potentiels, compare les offres existantes et essaie une petite série ou un prototype. Fixe un budget de test et un critère de réussite avant d’acheter beaucoup de stock ou du matériel.'],
+['💶','Fixe un prix rentable','Additionne tes coûts variables par vente, puis vérifie que le prix couvre aussi une part réaliste des charges fixes, impôts et cotisations. Compare les prix du marché, mais ne copie pas un prix sans connaître tes propres coûts.'],
+['💧','Protège ta trésorerie','Prévois les délais entre une dépense et le paiement du client, les retours, les périodes creuses et les factures à venir. Garde une réserve pour les besoins essentiels avant de réinvestir tout ton argent.'],
+['📈','Suis le marché avec des sources datées','Observe régulièrement les prix, les avis clients, les nouveautés et les offres concurrentes. Pour la France, consulte notamment les études de l’INSEE, les ressources de Bpifrance Création et les informations de la Banque de France. Vérifie toujours la date, le périmètre et la source des chiffres : Budgy ne reçoit pas de données de marché en direct.'],
+['🧪','Décide avec des scénarios','Avant un achat important, calcule combien d’unités tu dois vendre pour couvrir son coût. Compare un scénario prudent, un scénario réaliste et un scénario optimiste, puis n’engage que le montant que tu peux supporter de perdre.']];
+var chatMessages=[];
+function offlineAnswer(question){var q=question.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'');
+if(/livret a|livret|ldds|developpement durable et solidaire/.test(q))return 'Le Livret A et le LDDS sont des livrets d’épargne réglementés en France : le capital est garanti, l’argent reste disponible et les intérêts sont exonérés d’impôt et de prélèvements sociaux. Le Livret A est ouvert à tous, avec un plafond de versements de 22 950 €. Le LDDS est réservé aux personnes majeures domiciliées fiscalement en France, avec un plafond de 12 000 €. Le taux est fixé par l’État et peut évoluer ; au 27 octobre 2026, Budgy utilise 1,7 % pour chacun. Les intérêts sont calculés par quinzaine et versés une fois par an. Tu peux comparer les deux dans l’onglet « Livrets » ; vérifie les conditions auprès de ta banque.';
+if(/business|entrepren|entreprise|rentab|client|chiffre d'affaires|marge|prix de vente|vente|stock|tresorer|concurr|marche|marcher|demande|investir dans|investissement professionnel/.test(q))return 'Pour améliorer la rentabilité d’une activité, calcule la marge réelle par vente en retirant achat/fabrication, livraison, commissions et autres coûts variables, puis suis les charges fixes et la trésorerie. Avant d’investir dans du stock ou du matériel, teste la demande à petite échelle et calcule le seuil de rentabilité. Pour étudier le marché, compare les offres et les avis clients et consulte des données datées de sources comme l’INSEE, Bpifrance Création ou la Banque de France. Je suis hors ligne : je ne peux pas fournir les prix, tendances ou chiffres du marché en temps réel. Pour un placement financier ou une décision fiscale/juridique, vérifie les sources officielles et demande un avis professionnel adapté.';
+if(/invest|placement|bourse|action|crypto|pea|etf|livret/.test(q))return 'Pour investir, commence par vérifier que tu as une épargne de précaution disponible et que tes dépenses essentielles sont couvertes. Un placement peut baisser : n’investis que l’argent dont tu n’as pas besoin à court terme, comprends les frais et les risques, et méfie-toi des promesses de rendement garanti. Les crypto-actifs sont particulièrement volatils. Je ne peux pas choisir un placement adapté à ta situation ; compare les informations officielles ou demande conseil à un professionnel agréé.';
+if(/budget|depens|argent|gerer|gestion|fin de mois|reste/.test(q))return 'Pour mieux gérer ton budget, commence par noter tes revenus et dépenses fixes, puis fixe une limite réaliste pour les dépenses variables. Garde une petite marge pour les imprévus et regarde chaque semaine les catégories où tu dépenses le plus. Tu peux aussi ajuster les montants dans Réglages.';
+if(/epargn|econom|mettre de cote|mettre de l'argent de cote|urgence|imprevu/.test(q))return 'Choisis un objectif simple et un montant régulier, même petit, à mettre de côté dès que tu reçois tes revenus. Constitue d’abord une réserve accessible pour les imprévus. Évite de bloquer l’argent dont tu pourrais avoir besoin bientôt.';
+if(/dette|credit|emprunt|decouvert/.test(q))return 'Fais la liste des sommes dues, des échéances et des taux. Priorise les paiements essentiels et les dettes aux frais les plus élevés, et contacte rapidement l’organisme concerné si tu risques un retard. Évite de prendre un nouveau crédit pour en rembourser un autre sans conseil adapté.';
+if(/achat|acheter|permettre/.test(q))return 'Avant un achat, vérifie le montant restant dans la catégorie concernée et garde une marge pour les dépenses indispensables. Pour un achat non urgent, attendre 24 heures aide souvent à décider. Tu peux aussi utiliser « Puis-je me le permettre ? » dans Astuces.';
+return 'Je fonctionne hors ligne avec quelques thèmes de conseils, pas comme une IA connectée. Essaie une question sur le budget, l’épargne, les dettes, un achat ou l’investissement. Pour une décision financière personnelle, vérifie les informations auprès d’une source officielle ou d’un professionnel qualifié.'}
+function bindChat(){var form=document.getElementById('chat-form'),toggle=document.getElementById('chat-toggle'),panel=document.getElementById('chat-panel');if(!form||!toggle||!panel)return;
+function render(){var log=document.getElementById('chat-log');log.innerHTML='';
+if(!chatMessages.length)chatMessages.push({role:'assistant',text:'Salut ! Je peux donner des repères généraux sur ton budget, l’épargne, les dettes, l’investissement et la rentabilité d’une activité. Essaie : « C’est quoi le Livret A et le LDDS ? », « Comment calculer ma marge ? » ou « Comment tester mon idée ? »'});
+chatMessages.forEach(function(m){var p=document.createElement('p');p.className='chat-message'+(m.role==='user'?' user':'');p.textContent=m.text;log.appendChild(p)});
+log.scrollTop=log.scrollHeight}
+toggle.onclick=function(){panel.hidden=!panel.hidden;toggle.setAttribute('aria-expanded',!panel.hidden);if(!panel.hidden){render();document.getElementById('chat-input').focus()}};
+form.onsubmit=function(e){e.preventDefault();var input=document.getElementById('chat-input'),question=input.value.trim();if(!question)return;
+chatMessages.push({role:'user',text:question},{role:'assistant',text:offlineAnswer(question)});
+input.value='';render();input.focus()}}
+var ADV={logement:'Pense à la colocation et vérifie tes droits à l’APL.',courses:'Fais une liste et compare les prix au kilo.',essence:'Essaie le covoiturage ou regroupe tes trajets.',loisirs:'Choisis une sortie payante par période et privilégie les activités gratuites.',autres:'Regarde si tu peux acheter d’occasion (livres, matériel).'};
+function tips(){var P=per(),sp={},w=null,wr=0,msg;
+CATS.forEach(function(c){sp[c.id]=0});S.exp.forEach(function(e){if(e.t>=P.s&&e.t<P.e)sp[e.c]=(sp[e.c]||0)+e.a});
+CATS.forEach(function(c){var b=S.budgets[c.id]||0;if(c.id!=='epargne'&&b>0&&sp[c.id]/b>wr){wr=sp[c.id]/b;w=c}});
+if(w&&wr>1)msg=w.e+' Tu dépasses ton budget '+w.n+' ('+Math.round(wr*100)+' %). '+ADV[w.id];
+else if(w&&wr>0.8)msg=w.e+' Ton budget '+w.n+' est presque atteint ('+Math.round(wr*100)+' %). '+ADV[w.id];
+else msg='🎯 Aucun dépassement pour l’instant, bravo ! Pense à mettre un peu de côté dès maintenant.';
+var h='<h1>Astuces</h1>'+tabs()+'<p class="s">Des idées simples pour gérer ton argent et développer une activité rentable.</p><div class="card"><h2>💬 Conseil pour toi</h2><p style="margin:0">'+msg+'</p></div><button type="button" class="chat-launch" id="chat-toggle" aria-expanded="false" aria-controls="chat-panel"><span class="chat-avatar" aria-hidden="true">🤖</span><span>BudgyChatbot<small>Budget, investissement et conseils business</small></span></button><div class="card chat-panel" id="chat-panel" hidden><h2>BudgyChatbot</h2><div id="chat-log" class="chat-log" role="log" aria-live="polite" aria-label="Conversation avec BudgyChatbot"></div><form id="chat-form" class="chat-form"><input id="chat-input" type="text" maxlength="500" placeholder="Ex. comment calculer ma marge ?" aria-label="Ta question" autocomplete="off" required><button type="submit">Envoyer</button></form><p class="chat-note">Réponses prédéfinies et hors ligne, sans envoi de tes données. Pas de cotations ou de données de marché en temps réel ni de recommandations financières personnalisées.</p></div>'+afford()+'<div class="card tp">';
+TIPS.forEach(function(t,i){h+='<details'+(i===0?' open':'')+'><summary>'+t[0]+' '+t[1]+'</summary><p>'+t[2]+'</p></details>'});
+h+='</div><div class="card tp"><h2>💼 Rentabiliser son activité</h2><p class="chat-note">Des bases pour tester une idée, fixer ses prix et suivre son marché.</p>';
+BUSINESS_TIPS.forEach(function(t,i){h+='<details'+(i===0?' open':'')+'><summary>'+t[0]+' '+t[1]+'</summary><p>'+t[2]+'</p></details>'});
+app.innerHTML=h+'</div>';bindTabs();bindChat();bindAff()}
+var keepOpen=false,gsel='🏖️',GE=['🏖️','💻','🚗','🎁','🎓','🏠'],DAYS=['Dimanche','Lundi','Mardi','Mercredi','Jeudi','Vendredi','Samedi'];
+function fin(h){app.innerHTML=h;bindTabs();requestAnimationFrame(function(){requestAnimationFrame(function(){q('[data-w]').forEach(function(i){i.style.width=i.dataset.w+'%'});q('[data-h]').forEach(function(i){i.style.height=i.dataset.h+'%'})})});q('.cu').forEach(function(x){countUp(x,parseFloat(x.dataset.v))});if(toast){var t=document.createElement('div');t.className='toast';t.textContent=toast;document.body.appendChild(t);setTimeout(function(){t.remove()},2300);toast=''}}
+function perOff(o){var P=per(),f=S.freq,d=new Date(P.s);if(o===0)return P;
+if(f==='mois')return{s:new Date(d.getFullYear(),d.getMonth()-o,1).getTime(),e:new Date(d.getFullYear(),d.getMonth()-o+1,1).getTime()};
+if(f==='an')return{s:new Date(d.getFullYear()-o,0,1).getTime(),e:new Date(d.getFullYear()-o+1,0,1).getTime()};
+var L=P.e-P.s;return{s:P.s-o*L,e:P.e-o*L}}
+function obj(){S.goals=S.goals||[];var T=0;S.goals.forEach(function(g){T+=g.s});
+var h='<h1>Objectifs</h1>'+tabs()+'<p class="s">Mets de l’argent de côté pour un projet : vacances, permis, ordinateur…</p><div class="card"><h2>Total mis de côté</h2><div class="mid2 cu" data-v="'+T+'">'+fmt(T)+'</div></div>';
+S.goals.forEach(function(g){var pc=Math.min(100,g.t>0?g.s/g.t*100:0),left=Math.max(0,g.t-g.s),ex='';
+if(g.d&&left>0){var dd=Math.ceil((new Date(g.d).getTime()-Date.now())/D);ex=dd>0?'Il faut mettre environ <b>'+fmt(left/Math.ceil(dd/7))+'</b> de côté par semaine ('+dd+' j restants).':'<span class="bad">La date visée est passée.</span>'}
+h+='<div class="card"><div style="display:flex;justify-content:space-between;align-items:center"><h2 style="margin:0">'+g.e+' '+esc(g.n)+'</h2><button class="x" data-gx="'+g.id+'" aria-label="Supprimer l’objectif">×</button></div><div class="bar tall" style="margin-top:14px"><i data-w="'+pc+'" style="background:var(--c3)"></i></div><p class="gl"><b>'+fmt(g.s)+'</b> sur '+fmt(g.t)+' · '+Math.round(pc)+' %</p><p class="s" style="margin:0 0 12px">'+(left>0?'Il manque '+fmt(left)+'. ':'🎉 Objectif atteint ! ')+ex+'</p><input id="ga_'+g.id+'" inputmode="decimal" placeholder="Montant" aria-label="Montant" autocomplete="off"><div class="chips" style="margin-top:10px"><button type="button" class="vw gm" data-g="'+g.id+'" data-s="1">＋ Mettre de côté</button><button type="button" class="vw gm" data-g="'+g.id+'" data-s="-1">− Retirer</button></div></div>'});
+h+='<div class="card"><h2>Nouvel objectif</h2><div class="chips">';GE.forEach(function(e){h+='<button type="button" class="vw ge" data-e="'+e+'" aria-pressed="'+(e===gsel)+'">'+e+'</button>'});
+h+='</div><label for="gn">Nom</label><input id="gn" placeholder="ex. Vacances d’été" autocomplete="off"><label for="gt">Montant à atteindre</label><input id="gt" inputmode="decimal" placeholder="ex. 600" autocomplete="off"><label for="gd">Date visée (facultatif)</label><input id="gd" type="date"><p id="err" class="bad" role="alert"></p><button class="btn" id="gadd">Créer l’objectif</button></div>';
+fin(h);
+q('.ge').forEach(function(b){b.onclick=function(){gsel=b.dataset.e;q('.ge').forEach(function(x){x.setAttribute('aria-pressed',x===b)})}});
+document.getElementById('gadd').onclick=function(){var n=document.getElementById('gn').value.trim(),t=num(document.getElementById('gt').value);if(!n||!(t>0)){document.getElementById('err').textContent='Indique un nom et un montant.';return}S.goals.push({id:'g'+Date.now(),n:n,e:gsel,t:t,s:0,d:document.getElementById('gd').value});save();toast=gsel+' Objectif créé';dash()};
+q('.gm').forEach(function(b){b.onclick=function(){var g=S.goals.filter(function(x){return x.id===b.dataset.g})[0],v=num(document.getElementById('ga_'+g.id).value);if(!(v>0))return;var old=g.s||0;g.s=Math.max(0,old+v*parseInt(b.dataset.s,10));S.goalMoves=S.goalMoves||[];if(g.s!==old)S.goalMoves.push({t:Date.now(),a:g.s-old,g:g.id});save();toast=b.dataset.s==='1'?'🎯 '+fmt(g.s-old)+' mis de côté':'↩️ '+fmt(old-g.s)+' retiré';dash()}});
+q('[data-gx]').forEach(function(b){b.onclick=function(){if(confirm('Supprimer cet objectif ?')){S.goals=S.goals.filter(function(x){return x.id!==b.dataset.gx});save();dash()}}})}
+function ensureLivretSim(){if(!S.livretSim)S.livretSim={initial:0,monthly:0,day:1,years:5,rateMode:'current',customRate:1.7,withdrawals:[]};if(!S.livretSim.withdrawals)S.livretSim.withdrawals=[];if(S.livretSim.configured===undefined)S.livretSim.configured=S.livretSim.initial!==0||S.livretSim.monthly!==0||S.livretSim.day!==1||S.livretSim.years!==5||S.livretSim.rateMode!=='current'||S.livretSim.customRate!==1.7||S.livretSim.withdrawals.length>0;return S.livretSim}
+function addMonths(date,amount){return new Date(date.getFullYear(),date.getMonth()+amount,1)}
+function livretValueDate(date,isDeposit){var year=date.getFullYear(),month=date.getMonth();
+if(isDeposit)return date.getDate()<=15?new Date(year,month,16):new Date(year,month+1,1);
+return date.getDate()<=15?new Date(year,month,1):new Date(year,month,16)}
+function nextQuinzaine(date){var day=date.getDate()<=15?16:1,month=date.getDate()<=15?date.getMonth():date.getMonth()+1;return new Date(date.getFullYear(),month,day)}
+function simulateLivret(cap,rate,sim){var todayDate=new Date(),todayStart=new Date(todayDate.getFullYear(),todayDate.getMonth(),todayDate.getDate()),end=new Date(todayStart);
+end.setFullYear(end.getFullYear()+sim.years);
+var firstPeriod=new Date(todayStart.getFullYear(),todayStart.getMonth(),todayStart.getDate()<=15?1:16),balance=Math.min(cap,sim.initial),principal=balance,withdrawn=0,uninvested=Math.max(0,sim.initial-balance),unapplied=0,accrued=0;
+var deposits=[],withdrawals=[];
+if(sim.monthly>0){for(var month=0;month<sim.years*12+2;month++){var base=addMonths(todayStart,month),lastDay=new Date(base.getFullYear(),base.getMonth()+1,0).getDate(),depositDate=new Date(base.getFullYear(),base.getMonth(),Math.min(sim.day,lastDay));
+if(depositDate<todayStart)continue;if(depositDate>=end)break;deposits.push({date:livretValueDate(depositDate,true),amount:sim.monthly})}}
+sim.withdrawals.forEach(function(w){var date=dateStamp(w.date);if(date>=todayStart.getTime()&&date<end.getTime())withdrawals.push({date:livretValueDate(new Date(date),false),amount:w.amount})});
+var current=firstPeriod;
+while(current<end){var boundaryKey=current.getTime(),remaining=withdrawals.filter(function(w){return w.date.getTime()===boundaryKey}),contributions=deposits.filter(function(d){return d.date.getTime()===boundaryKey});
+remaining.forEach(function(w){var amount=Math.min(balance,w.amount);balance-=amount;withdrawn+=amount;unapplied+=w.amount-amount});
+contributions.forEach(function(d){var accepted=Math.min(d.amount,Math.max(0,cap-balance));balance+=accepted;principal+=accepted;uninvested+=d.amount-accepted});
+var following=nextQuinzaine(current);if(following>end)break;
+accrued+=balance*rate/2400;
+if(following.getMonth()===0&&following.getDate()===1){var credited=Math.round(accrued*100)/100;balance+=credited;accrued=0}
+current=following}
+var ending=balance+Math.round(accrued*100)/100,interest=Math.round((ending+withdrawn-principal)*100)/100;
+return{balance:ending,principal:principal,withdrawn:withdrawn,interest:interest,uninvested:uninvested,unapplied:unapplied,rate:rate,cap:cap}}
+function livretRate(sim){if(sim.rateMode==='prudent')return 1;if(sim.rateMode==='favorable')return 2.5;if(sim.rateMode==='custom')return Math.max(0,Number(sim.customRate)||0);return 1.7}
+function livretResultsHTML(sim){
+var rate=livretRate(sim),specs=[{name:'Livret A',cap:22950},{name:'LDDS',cap:12000}],h='';
+specs.forEach(function(spec){
+var result=simulateLivret(spec.cap,rate,sim),isLdds=spec.name==='LDDS',item='';
+item+='<section class="livret-result" data-livret="'+(isLdds?'ldds':'a')+'"><div class="livret-result-head"><span class="livret-result-icon" aria-hidden="true">'+(isLdds?'🌱':'📘')+'</span><h3>'+spec.name+'</h3><span class="livret-cap">Plafond '+fmt(spec.cap)+'</span></div>';
+item+='<div class="stats"><div class="stat"><span>Solde estimé dans '+sim.years+(sim.years===1?' an':' ans')+'</span><b class="ok">'+fmt(result.balance)+'</b></div>';
+item+='<div class="stat"><span>Intérêts nets estimés</span><b>'+fmt(result.interest)+'</b></div><div class="stat"><span>Retraits pris en compte</span><b>− '+fmt(result.withdrawn)+'</b></div></div>';
+item+='<div class="forecast-row"><span>Capital initial et versements</span><b>'+fmt(result.principal)+'</b></div>';
+if(result.uninvested>0)item+='<p class="agenda-note">'+fmt(result.uninvested)+' de versements ne peuvent pas être placés car le plafond est atteint.</p>';
+if(result.unapplied>0)item+='<p class="agenda-note">'+fmt(result.unapplied)+' de retraits dépassent le solde simulé et ne sont pas appliqués.</p>';
+h+=item+'</section>';
+});
+return h;
+}function saveLivretForm(finalize){var sim=livretDraft||ensureLivretSim(),initial=num(document.getElementById('livret-initial').value),monthly=num(document.getElementById('livret-monthly').value),day=parseInt(document.getElementById('livret-day').value,10),years=parseInt(document.getElementById('livret-years').value,10),error=document.getElementById('livret-error');
+if(isNaN(initial)||initial<0||isNaN(monthly)||monthly<0||isNaN(day)||day<1||day>31||isNaN(years)||years<1||years>30){error.textContent='Vérifie le capital, le versement, le jour (1 à 31) et la durée (1 à 30 ans).';return}
+sim.initial=initial;sim.monthly=monthly;sim.day=day;sim.years=years;
+sim.rateMode=document.getElementById('livret-rate-mode').value;
+if(sim.rateMode==='custom'){var custom=num(document.getElementById('livret-custom-rate').value);if(isNaN(custom)||custom<0||custom>20){error.textContent='Le taux personnalisé doit être compris entre 0 et 20 %.';return}sim.customRate=custom}
+error.textContent='';if(finalize){sim.configured=true;S.livretSim=sim;save();livretDraft=null;livretEditingOpen=false;livretWithdrawalsOpen=false;livrets();return}document.getElementById('livret-results').innerHTML=livretResultsHTML(sim)}
+function livrets(){var savedSim=ensureLivretSim(),todayDate=today(),showForm=savedSim.configured!==true||livretEditingOpen;if(showForm&&!livretDraft)livretDraft=JSON.parse(JSON.stringify(savedSim));var sim=showForm?livretDraft:savedSim,mode=sim.rateMode||'current',h='<section class="livret-hero"><div class="livret-hero-top"><span class="livret-hero-icon" aria-hidden="true">📈</span><div><p class="livret-kicker">ÉPARGNE SANS SURPRISE</p><h1>Simulateur de livrets</h1></div></div><p>Projette ton épargne, ajuste tes versements et compare les scénarios en un coup d’œil.</p></section>'+tabs()+'<div class="livret-layout">'+(showForm?'<section class="card livret-input-card">':'<button type="button" class="form-toggle livret-sim-toggle" id="livret-sim-toggle" aria-expanded="false"><span class="form-toggle-icon" aria-hidden="true">🧮</span><span>Ma simulation<small>Appuie ici pour consulter ou modifier tes paramètres</small></span><span class="form-toggle-arrow" aria-hidden="true">›</span></button>')+(showForm?'<div class="livret-card-heading"><span class="livret-card-heading-icon" aria-hidden="true">🧮</span><div><h2>'+(sim.configured?'Modifier ma simulation':'Ta simulation')+'</h2><p>'+(sim.configured?'Change tes paramètres puis enregistre les modifications.':'Renseigne tes paramètres pour découvrir la projection.')+'</p></div></div><p class="livret-assumption"><strong>📌 Taux officiel utilisé : 1,7 % par an</strong>Identique pour le Livret A et le LDDS, exonéré d’impôts. Taux indiqué par Service-Public.fr, consulté le 27 octobre 2026. Il peut évoluer ; la simulation le maintient constant.</p><div class="livret-form"><div><label for="livret-initial">Capital déjà placé</label><input id="livret-initial" inputmode="decimal" min="0" value="'+sim.initial+'"></div><div><label for="livret-monthly">Versement mensuel</label><input id="livret-monthly" inputmode="decimal" min="0" value="'+sim.monthly+'"></div><div><label for="livret-day">Jour du versement</label><input id="livret-day" type="number" min="1" max="31" value="'+sim.day+'"></div><div><label for="livret-years">Durée (années)</label><input id="livret-years" type="number" min="1" max="30" value="'+sim.years+'"></div><div class="wide"><label for="livret-rate-mode">Taux annuel simulé</label><select id="livret-rate-mode"><option value="current"'+(mode==='current'?' selected':'')+'>Taux officiel actuel · 1,7 % constant</option><option value="prudent"'+(mode==='prudent'?' selected':'')+'>Scénario hypothétique prudent · 1 % constant</option><option value="favorable"'+(mode==='favorable'?' selected':'')+'>Scénario hypothétique favorable · 2,5 % constant</option><option value="custom"'+(mode==='custom'?' selected':'')+'>Choisir un taux constant</option></select><p class="livret-input-note">Les scénarios prudent et favorable sont des hypothèses, pas des taux annoncés ni des prévisions.</p></div><div class="wide" id="livret-custom-wrap"'+(mode==='custom'?'':' hidden')+'><label for="livret-custom-rate">Taux personnalisé (% par an)</label><input id="livret-custom-rate" type="number" min="0" max="20" step="0.05" value="'+sim.customRate+'"></div></div><div class="livret-withdrawals"><h3>Retraits ponctuels</h3><p class="chat-note">Ajoute un retrait daté ; le calcul tient compte des quinzaines.</p>':'');
+if(showForm){
+h+='<p id="livret-error" class="bad livret-error" role="alert"></p><button type="button" class="form-toggle livret-withdrawal-toggle" id="livret-withdrawal-toggle" aria-expanded="'+livretWithdrawalsOpen+'"><span class="form-toggle-icon" aria-hidden="true">↘️</span><span>Retrait ponctuel <small>'+(sim.withdrawals.length?sim.withdrawals.length+' retrait'+(sim.withdrawals.length>1?'s':'')+' enregistré'+(sim.withdrawals.length>1?'s':''):'Optionnel · aucun retrait')+'</small></span><span class="form-toggle-arrow" aria-hidden="true">'+(livretWithdrawalsOpen?'⌄':'›')+'</span></button>';
+if(livretWithdrawalsOpen){
+h+='<div class="livret-withdrawal-fields">';
+if(!sim.withdrawals.length)h+='<p class="livret-empty" id="livret-withdrawals-empty">Aucun retrait prévu pour le moment.</p>';
+sim.withdrawals.forEach(function(w){h+='<div class="forecast-row"><span>'+fmt(w.amount)+'<small>Retrait le '+new Date(dateStamp(w.date)).toLocaleDateString('fr-FR',{day:'numeric',month:'long',year:'numeric'})+'</small></span><button type="button" class="x" data-livret-remove="'+esc(w.id)+'" aria-label="Supprimer ce retrait">×</button></div>'});
+h+='<div class="livret-withdrawal"><div><label for="livret-withdrawal-amount">Montant du retrait</label><input id="livret-withdrawal-amount" inputmode="decimal" min="0" placeholder="ex. 100"></div><div><label for="livret-withdrawal-date">Date du retrait</label><input id="livret-withdrawal-date" type="date" min="'+dateValue(todayDate)+'"></div><button type="button" class="vw" id="livret-add-withdrawal" aria-label="Ajouter ce retrait">＋</button></div></div>'}
+h+='<button class="btn" type="button" id="livret-save">'+(sim.configured?'Enregistrer les modifications':'Enregistrer ma simulation')+'</button></div></section>'}
+h+='<section class="card livret-output-card"><div class="livret-card-heading"><span class="livret-card-heading-icon" aria-hidden="true">✨</span><div><h2>Résultats comparés</h2><p>Une estimation claire, selon tes réglages.</p></div></div><div class="livret-results" id="livret-results" aria-live="polite">'+livretResultsHTML(sim)+'</div><div class="livret-sources"><p class="chat-note">Calcul indicatif par quinzaine, intérêts capitalisés au 31 décembre et versements limités au plafond hors intérêts. Les deux livrets sont simulés séparément : le capital n’est pas placé deux fois.</p><a class="livret-source" href="https://www.service-public.gouv.fr/particuliers/vosdroits/F2365" target="_blank" rel="noopener noreferrer">↗ Source officielle · Livret A</a><a class="livret-source" href="https://www.service-public.gouv.fr/particuliers/vosdroits/F2368" target="_blank" rel="noopener noreferrer">↗ Source officielle · LDDS</a><p class="chat-note">Plafonds de versement : 22 950 € pour le Livret A et 12 000 € pour le LDDS. Vérifie ton éligibilité au LDDS auprès de ta banque. Simulation informative, pas un conseil financier.</p></div></section></div>';
+app.innerHTML=h;bindTabs();
+if(!showForm){document.getElementById('livret-sim-toggle').onclick=function(){livretEditingOpen=true;livrets()};return}
+function update(){document.getElementById('livret-custom-wrap').hidden=document.getElementById('livret-rate-mode').value!=='custom';saveLivretForm()}
+q('#livret-initial,#livret-monthly,#livret-day,#livret-years,#livret-custom-rate').forEach(function(input){input.oninput=update});
+document.getElementById('livret-rate-mode').onchange=update;
+document.getElementById('livret-save').onclick=function(){saveLivretForm(true)};
+var withdrawalToggle=document.getElementById('livret-withdrawal-toggle');if(withdrawalToggle)withdrawalToggle.onclick=function(){livretWithdrawalsOpen=!livretWithdrawalsOpen;livrets()};
+if(livretWithdrawalsOpen)document.getElementById('livret-add-withdrawal').onclick=function(){var amount=num(document.getElementById('livret-withdrawal-amount').value),date=document.getElementById('livret-withdrawal-date').value,error=document.getElementById('livret-error');
+if(!(amount>0)||!date){error.textContent='Indique un montant supérieur à 0 et une date pour le retrait.';return}
+if(date<dateValue(today())){error.textContent='La date du retrait ne peut pas être dans le passé.';return}
+var id='lw'+Date.now();while(sim.withdrawals.some(function(w){return w.id===id}))id+='x';
+sim.withdrawals.push({id:id,amount:amount,date:date});livrets()};
+q('[data-livret-remove]').forEach(function(button){button.onclick=function(){sim.withdrawals=sim.withdrawals.filter(function(w){return w.id!==button.dataset.livretRemove});livrets()}})}
+function monthSummary(){var now=new Date(),s=new Date(now.getFullYear(),now.getMonth(),1).getTime(),e=new Date(now.getFullYear(),now.getMonth()+1,1).getTime(),spent={},total=0,saved=0;
+CATS.forEach(function(c){spent[c.id]=0});
+S.exp.forEach(function(x){if(x.t>=s&&x.t<e){spent[x.c]=(spent[x.c]||0)+x.a;total+=x.a}});
+(S.goalMoves||[]).forEach(function(x){if(x.t>=s&&x.t<e)saved+=x.a});
+var income=S.freq==='mois'?S.income:S.freq==='sem'?S.income*52.1775/12:S.freq==='quinz'?S.income*365.25/14/12:S.freq==='an'?S.income/12:S.income*30.4375/Math.max(1,S.days||10);
+var factor=S.freq==='mois'?1:S.freq==='sem'?52.1775/12:S.freq==='quinz'?365.25/14/12:S.freq==='an'?1/12:30.4375/Math.max(1,S.days||10),over=[];
+CATS.forEach(function(c){var limit=(S.budgets[c.id]||0)*factor;if(spent[c.id]>0&&(limit<=0||spent[c.id]>limit))over.push({c:c,v:spent[c.id],limit:limit})});
+var h='<div class="card month-summary"><h2>Récapitulatif du mois · '+now.toLocaleDateString('fr-FR',{month:'long',year:'numeric'})+'</h2><div class="stats"><div class="stat"><span>Revenus estimés*</span><b>'+fmt(income)+'</b></div><div class="stat"><span>Dépenses</span><b>'+fmt(total)+'</b></div><div class="stat"><span>Épargne nette mise de côté</span><b class="'+(saved<0?'bad':'')+'">'+fmt(saved)+'</b></div><div class="stat"><span>Reste estimé</span><b>'+fmt(income-total-saved)+'</b></div></div><p class="chat-note">* Estimation d’après la fréquence de revenus réglée. Les mouvements d’objectifs sont suivis à partir de leur activation.</p><h3 class="sub">Catégories au-dessus du budget mensuel estimé</h3>';
+if(!over.length)h+='<p class="empty">Aucun dépassement de budget ce mois-ci.</p>';
+over.forEach(function(x){h+='<div class="forecast-row"><span>'+x.c.e+' '+x.c.n+'<small>'+fmt(x.v)+' dépensés · '+(x.limit>0?'limite estimée '+fmt(x.limit):'aucun budget défini')+'</small></span><b class="bad">'+(x.limit>0?'+'+fmt(x.v-x.limit):fmt(x.v))+'</b></div>'});
+return h+'</div>'}
+function monthForecast(){var now=new Date(),start=new Date(now.getFullYear(),now.getMonth(),1).getTime(),end=new Date(now.getFullYear(),now.getMonth()+1,1).getTime(),spent=0,planned=0,recurring=0,saved=0;
+S.exp.forEach(function(x){if(x.t>=start&&x.t<end)spent+=x.a});
+(S.planned||[]).forEach(function(x){if(x.t>=start&&x.t<end)planned+=x.a});
+(S.goalMoves||[]).forEach(function(x){if(x.t>=start&&x.t<end)saved+=x.a});
+(S.rec||[]).forEach(function(r){var since=new Date(r.since);
+for(var k=0;k<400;k++){var t;
+if(r.f==='mois'){var dt=new Date(since.getFullYear(),since.getMonth()+k,1),dim=new Date(dt.getFullYear(),dt.getMonth()+1,0).getDate();t=new Date(dt.getFullYear(),dt.getMonth(),Math.min(r.d,dim),8).getTime()}
+else t=new Date(since.getFullYear(),since.getMonth(),since.getDate()+((r.d+6)%7)+7*k,8).getTime();
+if(t>=end)break;if(t>now.getTime()&&t>=start)recurring+=r.a}});
+var income=S.freq==='mois'?S.income:S.freq==='sem'?S.income*52.1775/12:S.freq==='quinz'?S.income*365.25/14/12:S.freq==='an'?S.income/12:S.income*30.4375/Math.max(1,S.days||10),remaining=income-spent-planned-recurring-saved;
+return '<div class="card forecast"><h2>🔮 Prévision de fin de mois</h2><div class="stats"><div class="stat"><span>Revenus mensuels estimés</span><b>'+fmt(income)+'</b></div><div class="stat"><span>Reste estimé</span><b class="'+(remaining<0?'bad':'ok')+'">'+fmt(remaining)+'</b></div></div><div class="forecast-row"><span>Dépenses déjà enregistrées</span><b>− '+fmt(spent)+'</b></div><div class="forecast-row"><span>Achats prévus ce mois-ci</span><b>− '+fmt(planned)+'</b></div><div class="forecast-row"><span>Prélèvements récurrents à venir</span><b>− '+fmt(recurring)+'</b></div>'+(saved!==0?'<div class="forecast-row"><span>Épargne nette mise de côté</span><b>'+(saved>0?'− ':'+ ')+fmt(Math.abs(saved))+'</b></div>':'')+'<p class="chat-note">Estimation basée sur tes revenus mensuels moyens, les dépenses du mois, les achats prévus, les prochains prélèvements et ton épargne nette. Les achats prévus sont comptés même si leur date est déjà passée.</p></div>'}
+function salaryDatesBetween(start,end){var dates=[],anchor=new Date(S.incomeDate||S.pstart||today()),startDate=new Date(start),endDate=new Date(end);
+anchor.setHours(0,0,0,0);startDate.setHours(0,0,0,0);endDate.setHours(0,0,0,0);
+if(S.freq==='sem'||S.freq==='quinz'||S.freq==='autre'){var intervalDays=S.freq==='sem'?7:S.freq==='quinz'?14:Math.max(1,S.days||10),anchorDay=Date.UTC(anchor.getFullYear(),anchor.getMonth(),anchor.getDate());
+for(var d=new Date(startDate);d<endDate;d.setDate(d.getDate()+1)){var dayNumber=(Date.UTC(d.getFullYear(),d.getMonth(),d.getDate())-anchorDay)/D;
+if(d>=anchor&&(S.freq==='sem'?d.getDay()===anchor.getDay():dayNumber%intervalDays===0))dates.push(new Date(d))}}
+else if(S.freq==='mois'){var month=new Date(Math.max(startDate.getFullYear(),anchor.getFullYear()),startDate.getFullYear()===anchor.getFullYear()?Math.max(startDate.getMonth(),anchor.getMonth()):startDate.getMonth(),1),anchorDay=anchor.getDate();
+for(;month<endDate;month.setMonth(month.getMonth()+1)){var last=new Date(month.getFullYear(),month.getMonth()+1,0).getDate(),date=new Date(month.getFullYear(),month.getMonth(),Math.min(anchorDay,last));if(date>=anchor&&date>=startDate&&date<endDate)dates.push(date)}}
+else if(S.freq==='an'){var year=Math.max(startDate.getFullYear(),anchor.getFullYear());
+for(;year<=endDate.getFullYear();year++){var last=new Date(year,anchor.getMonth()+1,0).getDate(),date=new Date(year,anchor.getMonth(),Math.min(anchor.getDate(),last));if(date>=anchor&&date>=startDate&&date<endDate)dates.push(date)}}
+return dates}
+function weekAgenda(){var now=new Date(),monday=new Date(now.getFullYear(),now.getMonth(),now.getDate()-((now.getDay()+6)%7)+agendaWeekOffset*7),weekStart=monday.getTime(),weekEndDate=new Date(monday);weekEndDate.setDate(weekEndDate.getDate()+7);var weekEnd=weekEndDate.getTime(),days=[],byDay={};
+for(var i=0;i<7;i++){var dayDate=new Date(monday);dayDate.setDate(monday.getDate()+i);var date=dayDate.getTime();days.push(date);byDay[date]={in:0,out:0,events:[]}}
+function addEvent(event){var day=new Date(event.t);day.setHours(0,0,0,0);var key=day.getTime();if(key<weekStart||key>=weekEnd||!byDay[key])return;
+byDay[key][event.income?'in':'out']+=event.a;byDay[key].events.push(event)}
+S.exp.forEach(function(e){var c=cat(e.c);addEvent({t:e.t,a:e.a,income:false,n:e.n||c.n,meta:c.e+' '+c.n+(e.r?' · dépense récurrente':'')})});
+(S.bt||[]).forEach(function(e){var event;
+if(e.k==='v')event={t:e.t,a:e.a,income:true,n:e.n||'Vente',meta:'Gain business'+(e.g!==undefined?' · bénéfice '+fmt(e.g):'')};
+else if(e.k==='c')event={t:e.t,a:e.a,income:false,n:e.n||'Charge business',meta:'Charge business'};
+else if(e.k==='t')event={t:e.t,a:e.a,income:e.direction==='in',n:e.n||(e.direction==='in'?'Virement reçu':'Virement envoyé'),meta:e.direction==='in'?'Virement reçu':'Virement envoyé'};
+if(event)addEvent(event)});
+salaryDatesBetween(weekStart,weekEnd).forEach(function(date){addEvent({t:date.getTime(),a:S.income,income:true,estimated:true,n:'Salaire prévu',meta:'Revenu estimé · '+({sem:'chaque semaine',quinz:'toutes les deux semaines',mois:'chaque mois',an:'chaque année',autre:'tous les '+(S.days||10)+' jours'}[S.freq]||'fréquence configurée')})});
+days.forEach(function(day){byDay[day].events.sort(function(a,b){return a.t-b.t})});
+var selected=agendaSelectedDate;
+if(selected===null||selected<weekStart||selected>=weekEnd){selected=days[Math.min(6,Math.max(0,Math.floor((now.getTime()-weekStart)/D)))];agendaSelectedDate=selected}
+var finalDate=new Date(weekEndDate);finalDate.setDate(finalDate.getDate()-1);var range=monday.toLocaleDateString('fr-FR',{day:'numeric',month:'short'})+' – '+finalDate.toLocaleDateString('fr-FR',{day:'numeric',month:'short',year:'numeric'}),h='<div class="card"><h2>🗓️ Agenda de la semaine</h2><div class="agenda-week"><button type="button" id="agenda-prev" aria-label="Semaine précédente">‹</button><span class="agenda-week-label">'+range+'</span><button type="button" id="agenda-next" aria-label="Semaine suivante">›</button></div><div class="agenda-days" role="group" aria-label="Choisir un jour">';
+days.forEach(function(day){var info=byDay[day],date=new Date(day),label=date.toLocaleDateString('fr-FR',{weekday:'long',day:'numeric',month:'long'}),short=date.toLocaleDateString('fr-FR',{weekday:'short'}).replace('.','');
+h+='<button type="button" class="agenda-day" data-agenda-day="'+day+'" aria-pressed="'+(day===selected)+'" aria-label="'+label+(info.events.length?' : '+info.events.length+' mouvement(s)':' : aucun mouvement')+'"><span class="agenda-day-name">'+short+'</span><span class="agenda-day-date">'+date.getDate()+'</span>'+(info.in?'<span class="agenda-day-total income">+'+fmt(info.in)+'</span>':'')+(info.out?'<span class="agenda-day-total expense">−'+fmt(info.out)+'</span>':'')+(!info.events.length?'<span class="agenda-day-total">·</span>':'')+'</button>'});
+h+='</div><div class="agenda-legend"><span class="income"><i></i> Revenus estimés, ventes et virements reçus</span><span><i></i> Dépenses et charges business</span></div><p class="agenda-note">Les revenus sont estimés selon la fréquence et la date habituelle de réception réglées ; ils ne sont pas ajoutés au solde ni enregistrés comme gains.</p><h3 class="agenda-detail-title" id="agenda-detail-title">'+new Date(selected).toLocaleDateString('fr-FR',{weekday:'long',day:'numeric',month:'long'})+'</h3>';
+var selectedEvents=byDay[selected].events;
+if(!selectedEvents.length)h+='<p class="empty">Aucune dépense ni aucun gain ce jour-là.</p>';
+selectedEvents.forEach(function(event){var sign=event.income?'+':'−',time=event.estimated?'':new Date(event.t).toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit'});h+='<div class="agenda-movement"><div class="n">'+esc(event.n)+'<small>'+esc(event.meta)+(time?' · '+time:'')+'</small></div><b class="'+(event.income?'ok':'bad')+'">'+sign+' '+fmt(event.a)+'</b></div>'});
+return h+'</div>'}
+function bindWeekAgenda(){q('[data-agenda-day]').forEach(function(button){button.onclick=function(){agendaSelectedDate=parseInt(button.dataset.agendaDay,10);hist()}});
+var previous=document.getElementById('agenda-prev'),next=document.getElementById('agenda-next');
+if(previous)previous.onclick=function(){agendaWeekOffset--;agendaSelectedDate=null;hist()};
+if(next)next.onclick=function(){agendaWeekOffset++;agendaSelectedDate=null;hist()}}
+function hist(){var N=6,rows=[],mx=S.income,f=S.freq;
+for(var o=N-1;o>=0;o--){var p=perOff(o),t=0;S.exp.forEach(function(e){if(e.t>=p.s&&e.t<p.e)t+=e.a});rows.push({p:p,t:t,o:o});mx=Math.max(mx,t)}
+var lb=function(p){var d=new Date(p.s);return f==='mois'?d.toLocaleDateString('fr-FR',{month:'short'}):f==='an'?String(d.getFullYear()):d.toLocaleDateString('fr-FR',{day:'numeric',month:'numeric'})};
+var cur=rows[N-1],prv=rows[N-2],h='<h1>Historique</h1>'+tabs()+'<p class="s">Compare tes dépenses d’une période à l’autre.</p>';
+var msg=prv.t>0?(cur.t<=prv.t?'📉 Pour l’instant, tu dépenses <b class="ok">'+Math.round((prv.t-cur.t)/prv.t*100)+' % de moins</b> que la période précédente.':'📈 Pour l’instant, tu dépenses <b class="bad">'+Math.round((cur.t-prv.t)/prv.t*100)+' % de plus</b> que la période précédente.'):'Pas encore de période précédente à comparer.';
+h+='<div class="card"><h2>Les 6 dernières périodes</h2><div class="plot">';
+rows.forEach(function(r){h+='<div class="col"><small>'+fmt(r.t)+'</small><i data-h="'+(r.t/mx*100)+'" style="background:'+(r.t>S.income?'var(--bad)':r.o===0?'var(--c1)':'color-mix(in srgb,var(--c1) 35%,var(--bg))')+'"></i></div>'});
+h+='<div class="bl" style="bottom:'+(S.income/mx*100)+'%"><span>Revenu</span></div></div><div class="lbls">';
+rows.forEach(function(r){h+='<span>'+lb(r.p)+'</span>'});
+h+='</div><p style="margin:16px 0 0">'+msg+'</p></div>';
+var now=new Date(),thisStart=new Date(now.getFullYear(),now.getMonth(),1).getTime(),nextStart=new Date(now.getFullYear(),now.getMonth()+1,1).getTime(),prevStart=new Date(now.getFullYear(),now.getMonth()-1,1).getTime(),cc={},pc={};
+CATS.forEach(function(c){cc[c.id]=0;pc[c.id]=0});
+S.exp.forEach(function(e){if(e.t>=thisStart&&e.t<nextStart)cc[e.c]=(cc[e.c]||0)+e.a;else if(e.t>=prevStart&&e.t<thisStart)pc[e.c]=(pc[e.c]||0)+e.a});
+h+='<div class="card"><h2>Comparaison des mois par catégorie</h2><p class="chat-note">'+new Date(prevStart).toLocaleDateString('fr-FR',{month:'long',year:'numeric'})+' → '+new Date(thisStart).toLocaleDateString('fr-FR',{month:'long',year:'numeric'})+' (mois en cours)</p>';
+CATS.forEach(function(c){var d=cc[c.id]-pc[c.id],change=pc[c.id]>0?(Math.abs(d)/pc[c.id]*100):null,label=d>0?'▲ '+(change===null?'nouveau':'+'+Math.round(change)+' %'):d<0?'▼ −'+Math.round(change)+' %':'= stable';h+='<div class="cmp"><span>'+c.e+' '+c.n+'</span><span>'+fmt(pc[c.id])+' → <b>'+fmt(cc[c.id])+'</b> <b class="'+(d>0?'bad':d<0?'ok':'')+'">'+label+'</b></span></div>'});
+fin(h+'</div>'+monthSummary()+weekAgenda());bindWeekAgenda()}
+function applyRec(){if(!S.rec||!S.rec.length)return;S.rk=S.rk||{};var n=Date.now(),ch=false;
+S.rec.forEach(function(r,ix){var st=new Date(r.since);
+for(var k=0;k<400;k++){var t;
+if(r.f==='mois'){var dt=new Date(st.getFullYear(),st.getMonth()+k,1),dim=new Date(dt.getFullYear(),dt.getMonth()+1,0).getDate();t=new Date(dt.getFullYear(),dt.getMonth(),Math.min(r.d,dim),8).getTime()}
+else t=new Date(st.getFullYear(),st.getMonth(),st.getDate()+((r.d+6)%7)+7*k,8).getTime();
+if(t>n)break;var key=r.id+'@'+t;
+if(!S.rk[key]){S.rk[key]=1;S.exp.push({a:r.a,c:r.c,n:r.n,t:t+ix,r:1});ch=true}}});
+if(ch)save()}
+function recurrenceCalendar(){var start=today(),end=start+30*D,now=Date.now(),events=[];
+S.rec.forEach(function(r){if(r.f==='mois'){var base=new Date(start);for(var i=0;i<3;i++){var first=new Date(base.getFullYear(),base.getMonth()+i,1),last=new Date(first.getFullYear(),first.getMonth()+1,0).getDate(),t=new Date(first.getFullYear(),first.getMonth(),Math.min(r.d,last),8).getTime();if(t>now&&t<=end)events.push({t:t,r:r})}}
+else{var offset=(r.d-new Date(start).getDay()+7)%7,t=new Date(start+offset*D);t.setHours(8,0,0,0);while(t.getTime()<=now)t.setDate(t.getDate()+7);for(;t.getTime()<=end;t.setDate(t.getDate()+7))events.push({t:t.getTime(),r:r})}});
+events.sort(function(a,b){return a.t-b.t});
+var h='<h3 class="sub">Prochains prélèvements · 30 jours</h3>';
+if(!events.length)return h+'<p class="empty">Aucun prélèvement récurrent prévu dans les 30 prochains jours.</p>';
+events.forEach(function(x){var c=cat(x.r.c);h+='<div class="forecast-row"><span>'+esc(x.r.n)+'<small>'+new Date(x.t).toLocaleDateString('fr-FR',{day:'numeric',month:'long'})+' · '+c.e+' '+c.n+'</small></span><b>'+fmt(x.r.a)+'</b></div>'});
+return h}
+function recurringList(){S.rec=S.rec||[];var h='';
+if(!S.rec.length)return '<p class="empty" style="margin-top:12px">Aucune dépense récurrente enregistrée.</p>';
+S.rec.forEach(function(r){var c=cat(r.c);h+='<div class="row"><span class="dot" style="background:var('+c.c+')"></span><div class="n">'+esc(r.n)+'<small>'+c.e+' '+c.n+' · '+(r.f==='mois'?'le '+r.d+' de chaque mois':'chaque '+DAYS[r.d].toLowerCase())+'</small></div><b>'+fmt(r.a)+'</b><button class="x" data-rx="'+esc(r.id)+'" aria-label="Supprimer '+esc(r.n)+'">×</button></div>'});
+return h}
+function recUI(){return '<p class="s" style="margin:0 0 8px">Elles s’ajoutent toutes seules à ton budget.</p>'+recurrenceCalendar()+'<label for="rn">Nom</label><input id="rn" placeholder="ex. Loyer, Netflix" autocomplete="off"><div class="g2"><div><label for="ra">Montant</label><input id="ra" inputmode="decimal" placeholder="ex. 350"></div><div><label for="rc">Catégorie</label><select id="rc">'+CATS.map(function(c){return '<option value="'+c.id+'">'+c.e+' '+c.n+'</option>'}).join('')+'</select></div></div><div class="g2"><div><label for="rf">Répétition</label><select id="rf"><option value="mois">Chaque mois</option><option value="sem">Chaque semaine</option></select></div><div><label for="rd" id="rdl">Jour du mois</label><input id="rd" inputmode="numeric" value="1"><select id="rw" aria-label="Jour de la semaine" hidden>'+DAYS.map(function(d,i){return '<option value="'+i+'"'+(i===1?' selected':'')+'>'+d+'</option>'}).join('')+'</select></div></div><button class="btn" id="radd" type="button" style="margin-top:14px">Ajouter la dépense récurrente</button>'}
+function bkUI(){return '<h3 class="sub">Sauvegarde</h3><p class="s" style="margin:0 0 8px">Tes données restent uniquement sur ce téléphone. Copie ce code pour les garder en lieu sûr ou les retrouver sur un autre appareil (colle-le ici puis touche Restaurer).</p><textarea id="bkc" rows="3" aria-label="Code de sauvegarde"></textarea><div class="chips" style="margin-top:10px"><button class="vw" id="bcopy" type="button">📋 Copier mon code</button><button class="vw" id="brest" type="button">📥 Restaurer</button></div>'}
+function bindSet(){var rf=document.getElementById('rf');if(!rf)return;
+rf.onchange=function(){var m=rf.value==='mois';document.getElementById('rd').hidden=!m;document.getElementById('rw').hidden=m;document.getElementById('rdl').textContent=m?'Jour du mois':'Jour de la semaine'};
+document.getElementById('radd').onclick=function(){var nm=document.getElementById('rn').value.trim(),a=num(document.getElementById('ra').value),f=rf.value,d=f==='mois'?Math.min(31,Math.max(1,parseInt(document.getElementById('rd').value,10)||1)):parseInt(document.getElementById('rw').value,10);
+if(!nm||!(a>0)){alert('Indique un nom et un montant.');return}
+var n0=new Date(),st=f==='mois'?new Date(n0.getFullYear(),n0.getMonth(),1):new Date(n0.getFullYear(),n0.getMonth(),n0.getDate()-((n0.getDay()+6)%7));
+S.rec.push({id:'r'+Date.now(),n:nm,a:a,c:document.getElementById('rc').value,f:f,d:d,since:st.getTime()});applyRec();save();settingsRecurringOpen=true;toast='🔁 Dépense récurrente ajoutée';dash()};
+q('[data-rx]').forEach(function(b){b.onclick=function(){S.rec=S.rec.filter(function(r){return r.id!==b.dataset.rx});save();settingsRecurringOpen=true;dash()}});
+var bx=document.getElementById('bkc');bx.value=btoa(unescape(encodeURIComponent(JSON.stringify(S))));
+document.getElementById('bcopy').onclick=function(){bx.value=btoa(unescape(encodeURIComponent(JSON.stringify(S))));bx.select();try{navigator.clipboard.writeText(bx.value)}catch(e){try{document.execCommand('copy')}catch(e2){}}this.textContent='✅ Copié'};
+document.getElementById('brest').onclick=function(){try{var o=JSON.parse(decodeURIComponent(escape(atob(bx.value.trim()))));if(o&&o.income&&confirm('Remplacer tes données actuelles par cette sauvegarde ?')){S=o;S.rec=S.rec||[];S.rk=S.rk||{};S.bt=S.bt||[];S.biz=S.biz||[];S.planned=S.planned||[];S.goalMoves=S.goalMoves||[];S.goals=S.goals||[];S.incomeDate=S.incomeDate||S.pstart||today();S.theme=S.theme||'system';S.alertAt=S.alertAt||80;setTheme(S.theme);save();applyRec();toast='📥 Sauvegarde restaurée';dash()}}catch(e){alert('Ce code n’est pas valide.')}};
+document.getElementById('sv').onclick=function(){var i=num(document.getElementById('si').value),b=num(document.getElementById('sb').value),d=parseInt(document.getElementById('dd').value,10),threshold=num(document.getElementById('alertAt').value);
+if(ff==='autre'&&!(d>0)){alert('Indique le nombre de jours entre deux revenus.');return}
+if(isNaN(threshold)||threshold<1||threshold>100){alert('Le seuil d’alerte doit être compris entre 1 et 100 %.');return}
+var incomeDateValue=document.getElementById('incomeDate').value;if(!incomeDateValue){alert('Indique ta date habituelle de réception du revenu.');return}
+var same=CATS.every(function(c){return num(document.getElementById('b_'+c.id).value)===S.budgets[c.id]});
+if(i>0){if(same&&i!==S.income){var r=i/S.income;CATS.forEach(function(c){S.budgets[c.id]=Math.round(S.budgets[c.id]*r)})}S.income=i}
+if(!same)CATS.forEach(function(c){var v=num(document.getElementById('b_'+c.id).value);if(!isNaN(v)&&v>=0)S.budgets[c.id]=v});
+if(!isNaN(b))S.balance=b;
+if(ff!==S.freq||(ff==='autre'&&d!==S.days)){S.freq=ff;S.days=d||S.days;S.pstart=today()}
+S.incomeDate=dateStamp(incomeDateValue);S.alertAt=threshold;save();settingsIncomeOpen=false;settingsRecurringOpen=false;toast='✅ Réglages enregistrés';dash()};
+document.getElementById('rs').onclick=function(){if(confirm('Effacer toutes tes données ?')){S=null;try{localStorage.removeItem(KEY)}catch(e){}tab='budget';settingsIncomeOpen=false;settingsRecurringOpen=false;setTheme('system');start()}}}
+var THEMES=[['system','Automatique','#6c63ff'],['light','Lavande','#efebff'],['dark','Nuit','#2a2575'],['ocean','Océan','#0284c7'],['sunset','Coucher de soleil','#e45c78'],['mint','Menthe','#21a179'],['rose','Rose poudré','#d94f91'],['forest','Forêt','#47865b'],['midnight','Minuit','#43c6ac']];
+function settingsPage(){var nm=NM[S.freq],h='<h1>Réglages</h1>'+tabs()+'<p class="s">Personnalise ton thème et les paramètres de ton budget.</p><div class="card"><h2>🎨 Thème de l’application</h2><div class="theme-grid">';
+THEMES.forEach(function(x){h+='<button type="button" class="theme-option" data-theme="'+x[0]+'" aria-pressed="'+(S.theme===x[0])+'"><span class="theme-swatch" style="--swatch:'+x[2]+'"></span>'+x[1]+'</button>'});
+h+='</div></div><div class="card"><details id="settings-income"'+(settingsIncomeOpen?' open':'')+'><summary>💰 Revenus et budgets</summary><label>Mes revenus arrivent…</label>'+fqui(S.freq,S.days)+'<label for="incomeDate">Date habituelle de réception</label><input id="incomeDate" type="date" value="'+dateValue(S.incomeDate||S.pstart||today())+'"><p class="chat-note">Choisis une date de référence habituelle : l’agenda répétera le revenu selon la fréquence choisie.</p><div class="g2"><div><label for="si">Montant reçu</label><input id="si" inputmode="decimal" value="'+S.income+'"></div><div><label for="sb">Total de départ</label><input id="sb" inputmode="decimal" value="'+S.balance+'"></div></div><p class="s" style="margin:16px 0 0">Budget par catégorie ('+nm[0].replace('cette','par').replace('ce mois-ci','par mois')+')</p><div class="g2">';
+CATS.forEach(function(c){h+='<div><label for="b_'+c.id+'">'+c.e+' '+c.n+'</label><input id="b_'+c.id+'" inputmode="decimal" value="'+(S.budgets[c.id]||0)+'"></div>'});
+h+='</div><label for="alertAt">Alerte à partir de (%)</label><input id="alertAt" type="number" min="1" max="100" step="1" value="'+(S.alertAt||80)+'"><button class="btn" id="sv">Enregistrer les réglages</button></details></div><div class="card"><details id="settings-recurring"'+(settingsRecurringOpen?' open':'')+'><summary>🔁 Dépenses récurrentes</summary>'+recUI()+'</details>'+recurringList()+'</div><div class="card">'+bkUI()+'<button class="lnk" id="rs">Tout effacer et recommencer</button></div>';
+app.innerHTML=h;bindTabs();bindFq();bindSet();
+document.getElementById('settings-income').ontoggle=function(){settingsIncomeOpen=this.open};
+document.getElementById('settings-recurring').ontoggle=function(){settingsRecurringOpen=this.open};
+q('.theme-option').forEach(function(b){b.onclick=function(){S.theme=b.dataset.theme;setTheme(S.theme);save();q('.theme-option').forEach(function(x){x.setAttribute('aria-pressed',x===b)})}})}
+function afford(){return '<section class="afford-section"><button type="button" class="chat-launch" id="afford-toggle" aria-expanded="false" aria-controls="afford-panel"><span class="chat-avatar" aria-hidden="true">🛍️</span><span>Puis-je me le permettre ?<small>Appuie ici pour vérifier un achat</small></span></button><div class="afford-panel" id="afford-panel" hidden><div class="card"><h2>🛍️ Puis-je me le permettre ?</h2><label for="pp" style="margin-top:0">Prix de l’achat</label><input id="pp" inputmode="decimal" placeholder="ex. 60" autocomplete="off"><label for="pc">Catégorie</label><select id="pc">'+CATS.filter(function(c){return c.id!=='epargne'}).map(function(c){return '<option value="'+c.id+'"'+(c.id==='loisirs'?' selected':'')+'>'+c.e+' '+c.n+'</option>'}).join('')+'</select><p id="pr" class="pr">Saisis un prix pour savoir.</p></div></div></section>'}
+function bindAff(){var toggle=document.getElementById('afford-toggle'),panel=document.getElementById('afford-panel'),pp=document.getElementById('pp'),pc=document.getElementById('pc');if(!toggle||!panel)return;
+toggle.onclick=function(){panel.hidden=!panel.hidden;toggle.setAttribute('aria-expanded',!panel.hidden);if(!panel.hidden)pp.focus()};
+function go(){var v=num(pp.value),pr=document.getElementById('pr');if(!(v>0)){pr.className='pr';pr.textContent='Saisis un prix pour savoir.';return}
+var P=per(),sp=0,c=cat(pc.value);S.exp.forEach(function(e){if(e.t>=P.s&&e.t<P.e&&e.c===c.id)sp+=e.a});
+var left=Math.max(0,(S.budgets[c.id]||0)-sp),solde=availableBalance()+left;
+if(v>solde){pr.className='pr bad';pr.textContent='❌ Non : ton solde ('+fmt(solde)+') ne couvre pas cet achat.'}
+else if(v>left){pr.className='pr bad';pr.textContent='⚠️ Ça dépasse ton budget '+c.n+' de '+fmt(v-left)+' (il te reste '+fmt(left)+'). Tu peux le faire, mais il faudra réduire ailleurs.'}
+else{pr.className='pr ok';pr.textContent='✅ Oui ! Il te resterait '+fmt(left-v)+' en '+c.n+' et '+fmt(solde-v)+' sur ton compte.'}}
+if(!pp||!pc)return;
+pp.oninput=go;pc.onchange=go}
+var bsel='main',bk='v';
+function biz(){S.biz=S.biz||[];S.bt=S.bt||[];
+var P=per(),nm=NM[S.freq],TV=0,TC=0,received=0,sent=0,mx=1;
+S.bt.forEach(function(e){if(e.t>=P.s&&e.t<P.e){if(e.k==='v'){TV+=e.a;TC+=e.p||0}else if(e.k==='c')TC+=e.a;else if(e.k==='t'){if(e.direction==='in')received+=e.a;else sent+=e.a}}});mx=Math.max(1,TV,TC);
+var h='<h1>Business</h1>'+tabs()+'<p class="s">Enregistre tes ventes, charges et virements. Les virements reçus ou envoyés ajustent aussi ton solde disponible.</p>';
+h+='<div class="card"><h2>Résultat '+nm[0]+'</h2><div class="stats" style="grid-template-columns:1fr 1fr 1fr"><div class="stat"><span>Ventes</span><b class="cu ok" data-v="'+TV+'">'+fmt(TV)+'</b></div><div class="stat"><span>Charges</span><b class="cu bad" data-v="'+TC+'">'+fmt(TC)+'</b></div><div class="stat"><span>Bénéfice</span><b class="cu '+(TV-TC<0?'bad':'ok')+'" data-v="'+(TV-TC)+'">'+fmt(TV-TC)+'</b></div></div>';
+h+='<div class="forecast-row"><span>Virements reçus · envoyés<small>Impact sur ton solde disponible</small></span><b><span class="ok">+ '+fmt(received)+'</span> · <span class="bad">− '+fmt(sent)+'</span></b></div><div class="pb"><small><span>Ventes</span><span>'+fmt(TV)+'</span></small><div class="bar"><i data-w="'+(TV/mx*100)+'" style="background:var(--ok)"></i></div></div><div class="pb"><small><span>Charges</span><span>'+fmt(TC)+'</span></small><div class="bar"><i data-w="'+(TC/mx*100)+'" style="background:var(--bad)"></i></div></div>';
+if(true){h+='</div><div class="card"><h2>Ajouter une vente, une charge ou un virement</h2><div class="chips">';
+h+='</div><div class="chips" style="margin-top:10px"><button type="button" class="vw bkb" data-k="v" aria-pressed="'+(bk==='v')+'">💰 Vente</button><button type="button" class="vw bkb" data-k="c" aria-pressed="'+(bk==='c')+'">🧾 Charge</button><button type="button" class="vw bkb" data-k="t" aria-pressed="'+(bk==='t')+'">🔁 Virement</button></div><div id="vf"'+(bk==='v'?'':' hidden')+'><label for="bart">Qu’est-ce qui est vendu ?</label><input id="bart" placeholder="ex. Veste en jean" autocomplete="off"><label for="bori">D’où ça vient ?</label><input id="bori" placeholder="ex. Friperie, cadeau, Leboncoin" autocomplete="off"><label for="bpa">Prix d’achat (facultatif)</label><input id="bpa" inputmode="decimal" placeholder="ex. 8" autocomplete="off"></div><div id="tf"'+(bk==='t'?'':' hidden')+'><label for="tdir">Type de virement</label><select id="tdir"><option value="in">Reçu · ajouter au solde</option><option value="out">Envoyé · retirer du solde</option></select><label for="tn">Libellé (facultatif)</label><input id="tn" placeholder="ex. Virement reçu" autocomplete="off"></div><label for="ba" id="bal">'+(bk==='v'?'Prix de vente (gagné)':bk==='t'?'Montant du virement':'Montant')+'</label><input id="ba" inputmode="decimal" placeholder="ex. 25" autocomplete="off"><div id="cf"'+(bk==='v'||bk==='t'?' hidden':'')+'><label for="bnote">Note (facultatif)</label><input id="bnote" placeholder="ex. Frais d’envoi" autocomplete="off"></div><label id="dl" style="display:flex;gap:10px;align-items:center;font-weight:600"'+(bk==='v'?'':' hidden')+'><input type="checkbox" id="bd" checked style="width:20px;height:20px;padding:0"> Ajouter le gain directement à mon total actuel</label><p id="err" class="bad" role="alert"></p><button class="btn" id="be">Enregistrer</button></div>';
+h+='<div class="card"><h2>Derniers mouvements</h2>';
+var L=S.bt.slice(-8).reverse();if(!L.length)h+='<p class="empty">Rien d’enregistré pour l’instant.</p>';
+L.forEach(function(e){var x=S.biz.filter(function(y){return y.id===e.b})[0],transfer=e.k==='t',positive=e.k==='v'||(transfer&&e.direction==='in'),label=e.n||(e.k==='v'?'Vente':e.k==='c'?'Charge':positive?'Virement reçu':'Virement envoyé');h+='<div class="row"><div class="n">'+esc(label)+'<small>'+new Date(e.t).toLocaleDateString('fr-FR',{day:'numeric',month:'short'})+(e.o?' · vient de '+esc(e.o):'')+(e.k==='v'&&e.p?' · gain '+fmt(e.g):'')+'</small></div><b class="'+(positive?'ok':'bad')+'">'+(positive?'+':'−')+fmt(e.a)+'</b><button class="x" '+(e.id?'data-bx="'+esc(e.id)+'"':'data-bd="'+e.t+'"')+' aria-label="Supprimer ce mouvement">×</button></div>'});
+h+='</div>'}
+app.innerHTML=h;bindTabs();
+requestAnimationFrame(function(){requestAnimationFrame(function(){q('[data-w]').forEach(function(i){i.style.width=i.dataset.w+'%'})})});
+q('.cu').forEach(function(x){countUp(x,parseFloat(x.dataset.v))});
+if(toast){var t=document.createElement('div');t.className='toast';t.textContent=toast;document.body.appendChild(t);setTimeout(function(){t.remove()},2300);toast=''}
+function updateBizForm(){document.getElementById('vf').hidden=bk!=='v';document.getElementById('cf').hidden=bk==='v'||bk==='t';document.getElementById('tf').hidden=bk!=='t';document.getElementById('dl').hidden=bk!=='v';document.getElementById('bal').textContent=bk==='v'?'Prix de vente (gagné)':bk==='t'?'Montant du virement':'Montant'}
+q('.bkb').forEach(function(b){b.onclick=function(){bk=b.dataset.k;q('.bkb').forEach(function(x){x.setAttribute('aria-pressed',x===b)});updateBizForm()}});
+var be=document.getElementById('be');
+if(be)be.onclick=function(){var a=num(document.getElementById('ba').value);if(!(a>0)){document.getElementById('err').textContent='Saisis un montant supérieur à 0.';return}
+var id='bt'+Date.now();while(S.bt.some(function(x){return x.id===id}))id+='x';
+var e={id:id,b:bsel,k:bk,a:a,t:Date.now()};
+if(bk==='v'){var pa=num(document.getElementById('bpa').value);e.p=pa>0?pa:0;e.n=document.getElementById('bart').value.trim();e.o=document.getElementById('bori').value.trim();e.g=a-e.p;e.d=document.getElementById('bd').checked}
+else if(bk==='t'){e.direction=document.getElementById('tdir').value;e.n=document.getElementById('tn').value.trim()||(e.direction==='in'?'Virement reçu':'Virement envoyé')}
+else e.n=document.getElementById('bnote').value.trim();
+S.bt.push(e);save();toast=bk==='v'?'💰 '+(e.g>=0?'+':'')+fmt(e.g)+(e.d?' ajouté à ton total':' de gain enregistré'):bk==='t'?(e.direction==='in'?'📥 Virement reçu : +':'📤 Virement envoyé : −')+fmt(a):'🧾 Charge de '+fmt(a)+' enregistrée';dash()};
+q('[data-bx]').forEach(function(b){b.onclick=function(){S.bt=S.bt.filter(function(e){return e.id!==b.dataset.bx});save();dash()}});
+q('[data-bd]').forEach(function(b){b.onclick=function(){S.bt=S.bt.filter(function(e){return String(e.t)!==b.dataset.bd});save();dash()}})}
+function start(){ff='mois';
+app.innerHTML='<h1>Bienvenue 👋</h1><p class="s">Quelques infos pour créer ton budget. Tu pourras tout modifier dans les réglages.</p><div class="card"><label style="margin-top:0">Tes revenus arrivent…</label>'+fqui('mois')+
+'<label for="inc">Combien reçois-tu à chaque fois ?</label><input id="inc" inputmode="decimal" placeholder="ex. 800 €" autocomplete="off">'+
+'<label for="bal">Combien as-tu en tout actuellement ?</label><input id="bal" inputmode="decimal" placeholder="ex. 350 €" autocomplete="off">'+
+'<p id="err" class="bad" role="alert"></p><button class="btn" id="go">Créer mon budget</button></div>';
+bindFq();
+document.getElementById('go').onclick=function(){
+var i=num(document.getElementById('inc').value),b=num(document.getElementById('bal').value),d=parseInt(document.getElementById('dd').value,10);
+if(!(i>0)||isNaN(b)){document.getElementById('err').textContent='Saisis un revenu supérieur à 0 et ton total actuel.';return}
+if(ff==='autre'&&!(d>0)){document.getElementById('err').textContent='Indique le nombre de jours entre deux revenus.';return}
+var bu={};CATS.forEach(function(c){bu[c.id]=Math.round(i*c.p/100)});
+S={income:i,balance:b,freq:ff,days:d||0,pstart:today(),incomeDate:today(),budgets:bu,exp:[],planned:[],goalMoves:[],goals:[],rec:[],rk:{},biz:[],bt:[],theme:document.documentElement.getAttribute('data-theme')||'system',alertAt:80};save();dash()}}
+
+function dash(){if(tab!=='livrets'){livretEditingOpen=false;livretDraft=null}document.querySelector('main').classList.toggle('livret-page',tab==='livrets');ff=S.freq;if(tab==='tips'){tips();return}if(tab==='biz'){biz();return}if(tab==='obj'){obj();return}if(tab==='hist'){hist();return}if(tab==='livrets'){livrets();return}if(tab==='settings'){settingsPage();return}
+var P=per(),nm=NM[S.freq],now=Date.now(),
+mo=S.exp.filter(function(e){return e.t>=P.s&&e.t<P.e}),spent={},planned=pendingByCategory(P),tot=0;
+CATS.forEach(function(c){spent[c.id]=0});
+mo.forEach(function(e){spent[e.c]=(spent[e.c]||0)+e.a;tot+=e.a});
+var solde=availableBalance(),rest=S.income-tot,
+dl=Math.max(1,Math.round((P.e-today())/D)),el=Math.min(1,(now-P.s)/(P.e-P.s)),
+R=84,C=2*Math.PI*R,base=Math.max(S.income,tot),off=0,seg='';
+CATS.forEach(function(c){var l=spent[c.id]/base*C;if(l>0){seg+='<circle class="seg" r="'+R+'" cx="110" cy="110" fill="none" stroke="var('+c.c+')" stroke-width="26" stroke-dasharray="0 '+C+'" data-l="'+Math.max(l-1.5,0.5)+'" stroke-dashoffset="'+(-off)+'"/>';off+=l}});
+var mood=tot>S.income?'🚨 Budget dépassé : fais une pause sur les dépenses.':tot===0?'🌱 Rien dépensé pour l’instant.':tot/S.income>el+0.1?'⚠️ Tu dépenses plus vite que le temps qui passe.':'😎 Tu es dans les clous, continue !';
+var sub=new Date(P.s).toLocaleDateString('fr-FR',{day:'numeric',month:'short'})+' → '+new Date(P.e-D).toLocaleDateString('fr-FR',{day:'numeric',month:'short'});
+var h=tabs()+'<header class="hero"><div class="top"><h1>Mon budget</h1><span>'+sub+'</span></div><div class="two"><div><p class="k">Disponible hors budgets</p><div class="mid2 cu '+(solde<0?'bad':'')+'" data-v="'+solde+'">'+fmt(solde)+'</div></div><div class="rs"><p class="k">Budget utilisé '+nm[0]+'</p><div class="big cu '+(rest<0?'bad':'')+'" id="ring" data-v="'+tot+'">'+fmt(tot)+'</div></div></div>';
+var stk='';CATS.forEach(function(c){if(spent[c.id]>0)stk+='<i data-w="'+(spent[c.id]/base*100)+'" style="background:var('+c.c+')"></i>'});
+h+='<div class="stack" role="img" aria-label="Répartition des dépenses">'+stk+'<span class="tick" style="left:'+(el*100)+'%"></span></div><p class="hint">Le trait blanc montre l’avancée du temps.</p><p class="mood">'+mood+'</p></header>';
+h+='<div class="duo"><div><span>Revenus</span><b>'+fmt(S.income)+'</b></div><div><span>Dépensé '+nm[0]+'</span><b class="cu" data-v="'+tot+'">'+fmt(tot)+'</b></div></div>';
+h+='<p class="pace">'+(rest>0?'Environ <b>'+fmt(rest/dl)+'</b> par jour jusqu’à la fin de '+nm[2]+'.':'')+'</p>';
+h+='<h2 class="h">Où va ton argent ?</h2><div class="tiles">';
+CATS.forEach(function(c){var b=S.budgets[c.id]||0,s=spent[c.id],forecast=s+planned[c.id],pc=b>0?Math.min(forecast/b*100,100):(forecast>0?100:0),over=forecast>b;
+h+='<button type="button" class="chip tile'+(over?' over':'')+'" data-c="'+c.id+'" aria-pressed="'+(c.id===sel)+'" style="--col:var('+c.c+')"><i class="fill" data-h="'+pc+'"></i><span class="em">'+c.e+'</span><span class="nm">'+c.n+'</span><span class="am">'+fmt(s)+' <small>/ '+fmt(b)+'</small>'+(planned[c.id]>0?'<small class="planned-amount">+ '+fmt(planned[c.id])+' prévu</small>':'')+'</span></button>'});
+h+='</div><button type="button" class="form-toggle expense-toggle" id="expense-toggle" aria-expanded="false" aria-controls="expense-panel"><span class="form-toggle-icon" aria-hidden="true">＋</span><span class="expense-toggle-label">Ajouter une dépense<small>Note ton achat et garde ton budget à jour</small></span><span class="form-toggle-arrow" aria-hidden="true">›</span></button><div class="form-panel" id="expense-panel" hidden><div class="card"><p style="margin:0;color:var(--mut)">Dans : <b id="pk" style="color:var(--ink)">'+cat(sel).e+' '+cat(sel).n+'</b> · touche une case pour changer</p><label for="amt">Montant</label><input id="amt" inputmode="decimal" placeholder="ex. 12" autocomplete="off"><label for="note">Note (facultatif)</label><input id="note" placeholder="ex. Kebab avec les amis" autocomplete="off"><p id="err" class="bad" role="alert"></p><button class="btn" id="add">Ajouter la dépense</button></div></div><div class="card forecast"><h2>🔔 Alertes de budget</h2>';
+var alertAt=(S.alertAt||80)/100,alerts= CATS.filter(function(c){var b=S.budgets[c.id]||0,amount=spent[c.id]+planned[c.id];return amount>0&&(b<=0||amount/b>=alertAt)});
+if(!alerts.length)h+='<p class="empty">Aucune catégorie n’a atteint '+(S.alertAt||80)+' % de son enveloppe.</p>';
+else{h+='<ul class="alert-list">';alerts.forEach(function(c){var b=S.budgets[c.id],amount=spent[c.id]+planned[c.id],pc=b>0?Math.round(amount/b*100):null;h+='<li class="'+(b<=0||pc>=100?'bad':'')+'">'+c.e+' <b>'+c.n+'</b> : '+(b>0?pc+' % utilisé ou prévu ('+fmt(amount)+' / '+fmt(b)+')':'aucun budget défini · '+fmt(amount)+' utilisé ou prévu')+'</li>'});h+='</ul>'}
+h+='<p class="chat-note">Alerte à partir de '+(S.alertAt||80)+' %. Les achats prévus sont inclus.</p></div>';
+h+='</div>'+monthForecast();
+h+='<div class="card"><h2>Dernières dépenses</h2>';
+var last=S.exp.slice(-8).reverse();
+if(!last.length)h+='<p class="empty">Aucune dépense pour l’instant. Ajoute la première ci-dessus.</p>';
+last.forEach(function(e){var c=cat(e.c);h+='<div class="row"><span class="dot" style="background:var('+c.c+')"></span><div class="n">'+esc(e.n||c.n)+'<small>'+c.e+' '+c.n+' · '+new Date(e.t).toLocaleDateString('fr-FR',{day:'numeric',month:'short'})+'</small></div><b>'+fmt(e.a)+'</b><button class="x" data-d="'+e.t+'" aria-label="Supprimer cette dépense">×</button></div>'});
+h+='</div>'+planUI();
+app.innerHTML=h;
+requestAnimationFrame(function(){requestAnimationFrame(function(){q('[data-w]').forEach(function(i){i.style.width=i.dataset.w+'%'});q('[data-h]').forEach(function(i){i.style.height=i.dataset.h+'%'});q('.seg').forEach(function(c){c.style.strokeDasharray=c.dataset.l+' '+C})})});
+q('.cu').forEach(function(x){countUp(x,parseFloat(x.dataset.v))});
+if(pop&&!RM){document.getElementById('ring').classList.add('pop')}pop=false;
+if(toast){var t=document.createElement('div');t.className='toast';t.textContent=toast;document.body.appendChild(t);setTimeout(function(){t.remove()},2300);toast=''}
+bindFq();
+bindTabs();
+bindFormToggle('expense-toggle','expense-panel','amt');bindPlans();keepOpen=false;
+q('.chip').forEach(function(b){b.onclick=function(){sel=b.dataset.c;q('.chip').forEach(function(x){x.setAttribute('aria-pressed',x===b)});document.getElementById('pk').textContent=cat(sel).e+' '+cat(sel).n}});
+document.getElementById('add').onclick=function(){var a=num(document.getElementById('amt').value);
+if(!(a>0)){document.getElementById('err').textContent='Saisis un montant supérieur à 0.';return}
+S.exp.push({a:a,c:sel,n:document.getElementById('note').value.trim(),t:Date.now()});save();pop=true;toast=cat(sel).e+' −'+fmt(a)+' ajouté';dash()};
+q('[data-d]').forEach(function(b){b.onclick=function(){S.exp=S.exp.filter(function(e){return String(e.t)!==b.dataset.d});save();dash()}});
+}
+window.addEventListener('scroll',function(){var h=document.querySelector('.hero');if(!h)return;var y=window.scrollY;if(y>110)h.classList.add('mini');else if(y<20)h.classList.remove('mini')},{passive:true});
+try{navigator.storage&&navigator.storage.persist&&navigator.storage.persist()}catch(e){}
+if(S&&S.income){setTheme(S.theme||'system');applyRec();dash()}else{setTheme('system');start()}
+</script>
+</body>
+</html>
